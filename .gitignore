@@ -1,0 +1,64 @@
+## .NET / ASP.NET Core standard .gitignore
+
+# Local secrets — never commit real connection strings/credentials
+appsettings.Development.json
+appsettings.*.local.json
+secrets.json
+
+## Build results
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+## Visual Studio
+.vs/
+*.VC.db
+*.VC.VC.opendb
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+## NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Rider/VS test & coverage
+[Tt]est[Rr]esult*/
+*.trx
+coverage/
+*.coverage
+*.coveragexml
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Logs
+*.log
+logs/
+
+## EF Core migrations bundle output (keep the Migrations folder itself, ignore generated bundles)
+*.migrations.sql
+
+## Publish output
+publish/
+PublishProfiles/*.pubxml.user
