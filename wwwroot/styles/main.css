@@ -1,3 +1,2062 @@
-/* Shopistik — main stylesheet
-   Shared styles for all pages (index.html, catalog.html, product.html)
-   go here. No framework, no build step — plain CSS only. */
+/* ==========================================================================
+   Shopistik — main stylesheet
+   Shared styles for all pages (index.html, catalog.html, about.html).
+   Plain CSS only — no framework, no build step, no preprocessor.
+
+   Approach: mobile-first. Every base rule targets small screens; larger
+   screens are layered on top with min-width media queries.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+   Centralising colors/fonts/spacing as custom properties keeps the "luxury"
+   look consistent everywhere and makes future theming a one-place edit.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Palette: warm neutrals + a single muted gold accent, not stark black/white */
+  --color-bg: #faf7f2;
+  --color-ink: #201d1a;
+  --color-ink-soft: #5c5651;
+  --color-cream: #f3ece1;
+  --color-line: #e4dcd0;
+  --color-gold: #a9824f;
+
+  /* Rose palette, drawn from the logo's dusty-pink lipstick tones —
+     used for the hero, buttons and other accents instead of black. */
+  --color-rose-50: #fdf4f1;
+  --color-rose-100: #f7e1db;
+  --color-rose-200: #edc3ba;
+  --color-rose-400: #d9a6a1;
+  --color-rose-600: #b97570;
+  --color-rose-700: #8c4a45;
+  --color-rose-900: #5c2f2c;
+  --color-rose-950: #462420;
+
+  /* Type */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Layout */
+  --container-max: 1200px;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset / base
+   A small manual reset instead of a full framework reset — just enough to
+   get consistent, predictable box-sizing and remove default browser noise.
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   3. Site header
+   A simple flex bar: logo on one side, nav on the other. Flexbox is the
+   right tool here because it's a one-dimensional row of items that just
+   needs to space itself apart and re-wrap gracefully on very small screens.
+   -------------------------------------------------------------------------- */
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.site-header__logo img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.site-header__logo-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  color: var(--color-ink);
+}
+
+.site-header__nav {
+  display: none;
+  gap: var(--space-4);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 900px) {
+  .site-header__nav {
+    display: flex;
+  }
+}
+
+.site-header__nav a {
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.site-header__nav a:hover,
+.site-header__nav a:focus-visible {
+  border-color: var(--color-gold);
+}
+
+/* Below 900px the nav has nowhere to sit inline, so it becomes a full-width
+   dropdown panel toggled by `.site-header__toggle` (see main.js): hidden by
+   default, shown as a column of full-height, easy-to-tap rows when the
+   header carries `.nav-open`. Scoping this to max-width: 899px means the
+   dropdown styling can never leak into the ≥900px horizontal nav, even if
+   the class were still set when the viewport is resized wider. */
+@media (max-width: 899px) {
+  .site-header {
+    position: relative;
+  }
+
+  .site-header.nav-open .site-header__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: var(--space-2) var(--space-4) var(--space-3);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+    box-shadow: 0 24px 40px -20px rgba(32, 29, 26, 0.3);
+    z-index: 30;
+  }
+
+  .site-header.nav-open .site-header__nav a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.6rem 0.25rem;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .site-header.nav-open .site-header__nav a:last-child {
+    border-bottom: none;
+  }
+}
+
+.site-header__cta {
+  display: none;
+  padding: 0.7em 1.6em;
+  border-radius: 999px;
+  background: var(--color-rose-700);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.site-header__cta:hover,
+.site-header__cta:focus-visible {
+  background: var(--color-rose-900);
+  transform: translateY(-1px);
+}
+
+@media (min-width: 600px) {
+  .site-header__cta {
+    display: inline-block;
+  }
+}
+
+/* The bag icon sits at the very right edge of the header on every screen
+   size (it's the one nav element that's never hidden), with a small
+   circular count badge overlaid on its top-right corner that only shows
+   once at least one item has been added. */
+.site-header__bag {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  color: var(--color-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-header__bag svg {
+  width: 22px;
+  height: 22px;
+}
+
+.site-header__bag:hover,
+.site-header__bag:focus-visible {
+  background: var(--color-rose-100);
+  color: var(--color-rose-700);
+}
+
+.site-header__bag-count {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: grid;
+  place-items: center;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.3em;
+  border-radius: 999px;
+  background: var(--color-rose-700);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Mobile/tablet menu toggle: swaps in for the horizontal nav below 900px
+   (the width the nav itself switches to a row at) so links are never
+   completely unreachable — see the "nav-open" rules in the responsive
+   section for how the dropdown itself is laid out. Sized at a flat 44px
+   regardless of breakpoint since it's touch-oriented by definition
+   whenever it's visible at all. */
+.site-header__toggle {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.site-header__toggle:hover,
+.site-header__toggle:focus-visible {
+  background: var(--color-rose-100);
+}
+
+.site-header__toggle-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.site-header__toggle-icon--close {
+  display: none;
+}
+
+.site-header__toggle[aria-expanded='true'] .site-header__toggle-icon--open {
+  display: none;
+}
+
+.site-header__toggle[aria-expanded='true'] .site-header__toggle-icon--close {
+  display: block;
+}
+
+@media (min-width: 900px) {
+  .site-header__toggle {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Hero section
+   A two-column layout (text left, floating product card right) inspired by
+   modern SaaS landing pages, re-themed for beauty/cosmetics: warm blush
+   blobs instead of stark black, soft motion instead of a static banner.
+
+   Structure:
+     .hero            -> position:relative, clips the animated blobs
+     .hero__blob      -> two blurred, softly-animated gradient shapes that
+                         stand in for a photograph background
+     .hero__container -> the two-column grid (stacks on mobile)
+     .hero__text      -> headline, tagline, CTAs
+     .hero__visual    -> the floating product card + review badge
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-6) var(--space-5);
+  background: linear-gradient(180deg, var(--color-rose-50) 0%, var(--color-bg) 100%);
+}
+
+.hero__blob {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.hero__blob--one {
+  top: -18%;
+  left: -6%;
+  width: min(50vw, 34rem);
+  height: min(50vw, 34rem);
+  background: radial-gradient(circle, var(--color-rose-200) 0%, var(--color-rose-400) 50%, transparent 72%);
+  animation: blobFloatA 16s ease-in-out infinite;
+}
+
+.hero__blob--two {
+  bottom: -22%;
+  right: 4%;
+  width: min(38vw, 24rem);
+  height: min(38vw, 24rem);
+  background: radial-gradient(circle, var(--color-gold) 0%, var(--color-rose-200) 60%, transparent 75%);
+  animation: blobFloatB 20s ease-in-out infinite;
+}
+
+.hero__container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-6);
+  max-width: var(--container-max);
+  padding-inline: var(--space-4);
+  margin-inline: auto;
+}
+
+.hero__text {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  text-align: left;
+}
+
+.hero__heading {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 5vw + 1rem, 4.5rem);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  color: var(--color-ink);
+}
+
+.hero__heading-accent {
+  position: relative;
+  color: var(--color-rose-700);
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 0.08em;
+}
+
+.hero__tagline {
+  margin: 0;
+  max-width: 38ch;
+  font-size: clamp(1rem, 1vw + 0.75rem, 1.15rem);
+  font-weight: 300;
+  color: var(--color-ink-soft);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+.hero__see-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  transition: color 0.2s ease;
+}
+
+.hero__see-more:hover,
+.hero__see-more:focus-visible {
+  color: var(--color-rose-700);
+}
+
+.hero__arrow {
+  width: 3rem;
+  height: 1.9rem;
+  color: var(--color-rose-600);
+  animation: arrowWiggle 3s ease-in-out infinite;
+}
+
+.hero__visual {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+/* -------------------------------------------------------------------------
+   The "design studio" window: a browser/Figma-style frame that previews a
+   full miniature Shopistik landing page (main artboard), with a secondary
+   artboard peeking on the right and a file-info strip along the bottom —
+   mirroring the reference, restyled in beauty-brand rose/gold instead of
+   black.
+   ------------------------------------------------------------------------- */
+.hero__window {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  box-shadow: 0 40px 80px -30px rgba(140, 74, 69, 0.5), 0 16px 32px -16px rgba(140, 74, 69, 0.25);
+  overflow: hidden;
+  animation: cardFloat 7s ease-in-out infinite;
+}
+
+.hero__window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.hero__window-tag {
+  padding: 0.35em 0.9em;
+  border-radius: 8px;
+  background: var(--color-rose-50);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--color-rose-700);
+}
+
+.hero__window-expand {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.hero__window-body {
+  position: relative;
+  padding: 1rem;
+  background: var(--color-cream);
+  overflow: hidden;
+}
+
+/* --- The main mini page (an artboard rendering) --- */
+.hero__preview {
+  width: 82%;
+  height: 300px;
+  overflow: hidden;
+  background: var(--color-bg);
+  border-radius: 12px;
+  box-shadow: 0 16px 30px -14px rgba(92, 47, 44, 0.4);
+}
+
+.prev-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #fff;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.prev-logo {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.prev-navdots {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.prev-navdots i {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-rose-200);
+}
+
+.prev-btn {
+  width: 30px;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--color-rose-700);
+}
+
+.prev-hero {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+  background: linear-gradient(135deg, var(--color-rose-50) 0%, var(--color-rose-200) 100%);
+}
+
+.prev-hero-copy {
+  display: grid;
+  gap: 5px;
+  flex: 1;
+}
+
+.prev-hero-art {
+  width: 40%;
+  height: 66px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-rose-400), var(--color-gold));
+  box-shadow: 0 8px 16px -6px rgba(92, 47, 44, 0.4);
+}
+
+.prev-line {
+  display: block;
+  height: 4px;
+  border-radius: 3px;
+  background: var(--color-rose-200);
+}
+
+.prev-line--eyebrow {
+  width: 30%;
+  background: var(--color-gold);
+}
+
+.prev-line--h1 {
+  height: 9px;
+  width: 85%;
+  background: var(--color-rose-700);
+}
+
+.prev-line--h2 {
+  height: 6px;
+  width: 45%;
+  background: var(--color-rose-600);
+}
+
+.prev-line--text {
+  width: 70%;
+}
+
+.prev-line--sm {
+  height: 3px;
+  width: 90%;
+}
+
+.prev-line--short {
+  width: 45%;
+}
+
+.prev-pill {
+  width: 44px;
+  height: 12px;
+  margin-top: 3px;
+  border-radius: 6px;
+  background: var(--color-rose-700);
+}
+
+.prev-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+}
+
+.prev-card {
+  display: grid;
+  gap: 5px;
+  padding: 6px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px -6px rgba(92, 47, 44, 0.35);
+}
+
+.prev-thumb {
+  display: block;
+  height: 26px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, var(--color-rose-200), var(--color-gold));
+}
+
+.prev-thumb--tall {
+  height: 48px;
+}
+
+.prev-feature {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  background: var(--color-rose-900);
+}
+
+.prev-feature .prev-line--h2 {
+  background: var(--color-rose-100);
+}
+
+.prev-feature-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prev-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  flex: none;
+  background: linear-gradient(135deg, var(--color-rose-400), var(--color-gold));
+}
+
+.prev-feature-copy {
+  display: grid;
+  gap: 5px;
+  flex: 1;
+}
+
+.prev-feature .prev-line {
+  background: rgba(247, 225, 219, 0.55);
+}
+
+/* --- Secondary artboard peeking on the right edge --- */
+.hero__preview-side {
+  position: absolute;
+  top: 34px;
+  right: -6px;
+  width: 26%;
+  display: grid;
+  gap: 6px;
+  padding: 10px 9px;
+  background: #fff;
+  border-radius: 10px 0 0 10px;
+  box-shadow: -10px 16px 30px -14px rgba(92, 47, 44, 0.4);
+}
+
+/* --- Small side control tab, like the reference --- */
+.hero__window-handle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 14px;
+  height: 46px;
+  transform: translateY(-50%);
+  border-radius: 6px 0 0 6px;
+  background: var(--color-ink);
+}
+
+.hero__window-foot {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 0.7rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.hero__window-foot-icon {
+  grid-row: 1 / span 2;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.hero__window-foot-title {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-ink);
+}
+
+.hero__window-foot-sub {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   4b. Features / benefits row
+   A four-column grid of icon + heading + copy, sitting on a soft neutral
+   panel with a warm rose/gold glow bleeding in from the bottom-right —
+   mirroring the reference, re-themed for the beauty brand. The grid drops
+   to two columns on tablets and one on phones.
+   -------------------------------------------------------------------------- */
+.features {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-6);
+  background: var(--color-cream);
+}
+
+.features__glow {
+  position: absolute;
+  right: -8%;
+  bottom: -40%;
+  width: min(70vw, 46rem);
+  height: min(70vw, 46rem);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle at 60% 40%,
+    var(--color-gold) 0%,
+    var(--color-rose-400) 32%,
+    var(--color-rose-600) 55%,
+    transparent 72%);
+  filter: blur(30px);
+  opacity: 0.7;
+}
+
+.features__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-5) var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.feature {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.feature__badge {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.feature__badge svg {
+  width: 100%;
+  height: 100%;
+}
+
+.feature__badge-seal {
+  fill: var(--color-ink);
+}
+
+.feature__badge-check {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.feature__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 1.2vw + 1rem, 1.7rem);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.feature__text {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   4c. Shared section heading (eyebrow / title / intro)
+   "How it works", "Shop the collection" and the FAQ section all open with
+   the same eyebrow + title + intro pattern. Declared once here; the only
+   per-section differences (heading size, intro width) are layered on
+   immediately after as one-line overrides.
+   -------------------------------------------------------------------------- */
+.steps__eyebrow,
+.catalog__eyebrow,
+.faq__eyebrow,
+.about-hero__eyebrow,
+.why-us__eyebrow,
+.delivery__eyebrow,
+.bag__eyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-rose-700);
+}
+
+.steps__title,
+.catalog__title,
+.faq__title,
+.about-hero__title,
+.why-us__title,
+.delivery__title,
+.bag__title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.steps__title,
+.why-us__title,
+.delivery__title {
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+}
+
+.catalog__title,
+.faq__title,
+.bag__title {
+  font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
+}
+
+.about-hero__title {
+  font-size: clamp(2.4rem, 4vw + 1rem, 3.75rem);
+}
+
+.steps__intro,
+.catalog__intro,
+.faq__intro,
+.about-hero__subtitle,
+.why-us__intro,
+.delivery__intro,
+.bag__intro {
+  margin: var(--space-3) auto 0;
+  color: var(--color-ink-soft);
+}
+
+.steps__intro {
+  max-width: 40ch;
+}
+
+.catalog__intro {
+  max-width: 44ch;
+}
+
+.faq__intro {
+  max-width: 42ch;
+}
+
+.about-hero__subtitle {
+  max-width: 46ch;
+  font-size: 1.05rem;
+}
+
+.why-us__intro,
+.delivery__intro,
+.bag__intro {
+  max-width: 40ch;
+}
+
+/* --------------------------------------------------------------------------
+   4d. How it works (steps)
+   A centered intro followed by a vertical timeline of numbered steps. Each
+   step row is: number marker (with a connecting line) + copy + a small
+   decorative visual. Rows reveal on scroll via the `data-reveal` hook.
+   -------------------------------------------------------------------------- */
+.steps {
+  padding-block: var(--space-6);
+  background: var(--color-bg);
+}
+
+.steps__head {
+  max-width: 46rem;
+  margin-inline: auto;
+  margin-bottom: var(--space-6);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.steps__list {
+  position: relative;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  max-width: 40rem;
+}
+
+/* Each step row carries two layered, complementary scroll animations:
+   1. `[data-reveal]` (shared rule below) fades/slides the whole row
+      (number + connector + card) up into place — a single fire-once
+      IntersectionObserver hit, staggered 0.1s per step via main.js.
+   2. `[data-step]` additionally "lights up" the card itself — bright
+      border, colored icon, full-opacity text — the moment it scrolls
+      into view, and stays lit once triggered (see main.js). */
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  column-gap: var(--space-3);
+  padding-bottom: var(--space-4);
+}
+
+.step:last-child {
+  padding-bottom: 0;
+}
+
+.step__num {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+  color: var(--color-ink-soft);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 1;
+  transition: background-color 0.45s ease, border-color 0.45s ease, color 0.45s ease;
+}
+
+.step__connector {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: center;
+  width: 1px;
+  height: 100%;
+  min-height: 1.25rem;
+  background: var(--color-line);
+  transition: background-color 0.5s ease;
+}
+
+.step.is-active .step__num {
+  background: var(--color-rose-700);
+  border-color: var(--color-rose-700);
+  color: #fff;
+}
+
+.step.is-active .step__connector {
+  background: var(--color-rose-400);
+}
+
+.step__card {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  background: var(--color-bg);
+  opacity: 0.5;
+  transform: translateY(22px) scale(0.98);
+  filter: grayscale(0.5);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.6s ease,
+    border-color 0.6s ease,
+    box-shadow 0.6s ease,
+    background-color 0.6s ease;
+}
+
+.step.is-active .step__card {
+  opacity: 1;
+  transform: none;
+  filter: grayscale(0);
+  border-color: var(--color-rose-400);
+  background: #fff;
+  box-shadow: 0 20px 40px -26px rgba(140, 74, 69, 0.45);
+}
+
+.step__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  background: var(--color-rose-50);
+  color: var(--color-rose-200);
+  transform: scale(0.8) rotate(-8deg);
+  transition: background 0.5s ease, color 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.step__icon svg {
+  width: 60%;
+  height: 60%;
+}
+
+.step.is-active .step__icon {
+  background: linear-gradient(135deg, var(--color-rose-600), var(--color-rose-900));
+  color: #fff;
+  transform: none;
+}
+
+.step__copy {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.step__title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 0.6vw + 1rem, 1.25rem);
+  color: var(--color-ink-soft);
+  transition: color 0.5s ease;
+}
+
+.step.is-active .step__title {
+  color: var(--color-ink);
+}
+
+.step__kicker {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-ink-soft);
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+
+.step__text {
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+  opacity: 0.55;
+  transition: opacity 0.5s ease;
+}
+
+.step.is-active .step__kicker,
+.step.is-active .step__text {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   4e. Catalog page — product grid
+   A simple responsive grid of product cards. Each card media area uses a
+   rose/gold gradient + a small line-art icon in place of real photography.
+   Cards lift on hover/focus for a tactile, premium feel.
+   -------------------------------------------------------------------------- */
+.catalog {
+  padding-block: var(--space-6);
+}
+
+.catalog__head {
+  max-width: 40rem;
+  margin: 0 auto var(--space-6);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.catalog__grid {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* The hover lift: a small upward shift + a soft shadow, over 0.2s. Also
+   triggers on keyboard focus within (e.g. tabbing to the button) so the
+   affordance isn't mouse-only. */
+.product-card:hover,
+.product-card:focus-within {
+  transform: translateY(-5px);
+  box-shadow: 0 22px 40px -22px rgba(140, 74, 69, 0.4);
+  border-color: var(--color-rose-200);
+}
+
+.product-card__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 160px;
+  color: #fff;
+}
+
+.product-card__media--one { background: linear-gradient(135deg, var(--color-rose-400), var(--color-gold)); }
+.product-card__media--two { background: linear-gradient(135deg, var(--color-rose-600), var(--color-rose-900)); }
+.product-card__media--three { background: linear-gradient(135deg, var(--color-gold), var(--color-rose-600)); }
+.product-card__media--four { background: linear-gradient(135deg, var(--color-rose-200), var(--color-rose-600)); }
+
+.product-card__icon {
+  width: 44%;
+  height: 44%;
+  opacity: 0.9;
+}
+
+.product-card__tag {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-rose-700);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.product-card__body {
+  display: grid;
+  gap: 0.3rem;
+  padding: var(--space-4);
+}
+
+.product-card__category {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.product-card__name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--color-ink);
+}
+
+.product-card__desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-ink-soft);
+}
+
+.product-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+}
+
+.product-card__price {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.product-card__add {
+  padding: 0.5em 1em;
+  border: 1px solid var(--color-rose-700);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-rose-700);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.product-card__add:hover,
+.product-card__add:focus-visible {
+  background: var(--color-rose-700);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   4f. FAQ accordion
+   A list of question/answer pairs. Only one answer is open at a time —
+   opening one closes any other. The expand/collapse motion animates
+   `max-height` (see the comment above [data-reveal] below for why we can't
+   just transition `height: auto`); the chevron flips 180deg in sync via a
+   plain `transform` transition on the same 0.3s timing. See main.js for
+   the JS that measures each answer's real height and toggles state.
+   -------------------------------------------------------------------------- */
+.faq {
+  padding-block: var(--space-6);
+  background: var(--color-bg);
+}
+
+.faq__head {
+  max-width: 40rem;
+  margin: 0 auto var(--space-5);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.faq__list {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 42rem;
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
+
+.faq-item {
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.faq-item.is-open {
+  border-color: var(--color-rose-400);
+  box-shadow: 0 20px 40px -28px rgba(140, 74, 69, 0.35);
+}
+
+.faq-item__heading {
+  margin: 0;
+  font: inherit;
+}
+
+.faq-item__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.faq-item__question:hover,
+.faq-item__question:focus-visible {
+  color: var(--color-rose-700);
+}
+
+.faq-item__chevron {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--color-rose-600);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Chevron rotates 180deg the moment its item opens, and back when it closes. */
+.faq-item.is-open .faq-item__chevron {
+  transform: rotate(180deg);
+}
+
+/* Collapsed by default: max-height: 0 clips the answer completely. JS sets
+   an explicit pixel max-height (the answer's real scrollHeight) to open it,
+   and back to 0 to close it, so this transition always has real numbers to
+   animate between. */
+.faq-item__answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.faq-item__answer-inner {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--color-ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* Reveal-on-scroll entrance (paired with data-reveal in the markup).
+   Two-state (hidden -> visible) change, so a plain transition is enough —
+   see main.js for why this doesn't use @keyframes. `--reveal-delay` is set
+   per-element by main.js to stagger siblings in the same row/grid. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   4g. About page
+   A soft, generously-spaced page built from the same card/section patterns
+   used elsewhere (feature cards, step cards, centered section heads), so
+   it reads as part of the same site rather than a bolted-on template.
+   -------------------------------------------------------------------------- */
+.about-hero {
+  padding-block: var(--space-6) var(--space-5);
+  background: linear-gradient(180deg, var(--color-rose-50) 0%, var(--color-bg) 100%);
+  text-align: center;
+}
+
+.about-hero__inner {
+  max-width: 46rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.why-us {
+  padding-block: var(--space-6);
+  background: var(--color-bg);
+}
+
+.why-us__head {
+  max-width: 40rem;
+  margin: 0 auto var(--space-5);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.why-us__grid {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+/* Cards carry a visible shadow at rest (not just on hover) per the
+   "gentle shadow" brief — a soft, elegant lift rather than a flat card
+   that only reacts to interaction. */
+.why-us__card {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  padding: var(--space-4);
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  box-shadow: 0 24px 46px -32px rgba(140, 74, 69, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.why-us__card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 28px 50px -24px rgba(140, 74, 69, 0.45);
+}
+
+.why-us__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 14px;
+  background: var(--color-rose-50);
+  color: var(--color-rose-700);
+  transition: transform 0.2s ease;
+}
+
+/* Icon nudges up in scale alongside the card lift, reinforcing the same
+   hover moment rather than competing with it. */
+.why-us__card:hover .why-us__icon {
+  transform: scale(1.1);
+}
+
+.why-us__icon svg {
+  width: 55%;
+  height: 55%;
+}
+
+.why-us__card-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+}
+
+.why-us__card-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+
+/* Authenticity / trust band: a deliberately different, bolder shade (the
+   same dark rose used in the footer) so this reassurance message reads as
+   a distinct, confident "seal of trust" rather than blending into the
+   lighter sections around it. */
+.trust {
+  padding-block: var(--space-6);
+  background: var(--color-rose-900);
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.trust__inner {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  max-width: 42rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.trust__badge {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.trust__badge svg {
+  width: 55%;
+  height: 55%;
+}
+
+.trust__title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 2.4vw + 1rem, 2.25rem);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.trust__text {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.delivery {
+  padding-block: var(--space-6);
+  background: var(--color-bg);
+}
+
+.delivery__head {
+  max-width: 40rem;
+  margin: 0 auto var(--space-5);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.delivery__grid {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 50rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.delivery__item {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: var(--space-5) var(--space-4);
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  box-shadow: 0 24px 46px -32px rgba(140, 74, 69, 0.28);
+}
+
+.delivery__icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-rose-400), var(--color-gold));
+  color: #fff;
+}
+
+.delivery__icon svg {
+  width: 50%;
+  height: 50%;
+}
+
+.delivery__item-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--color-ink);
+}
+
+.delivery__price {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--color-rose-700);
+}
+
+.delivery__item-text {
+  margin: 0;
+  max-width: 26ch;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+
+/* --------------------------------------------------------------------------
+   4h. Bag page
+   A plain vertical list of item rows (icon + info + quantity stepper + line
+   total + remove) next to a small summary card. On narrow screens each row
+   splits across two lines via `grid-template-areas` — icon/info/remove on
+   top, qty/total below — instead of cramming five columns into one row.
+   -------------------------------------------------------------------------- */
+.bag {
+  padding-block: var(--space-6);
+  min-height: 50vh;
+}
+
+.bag__head {
+  max-width: 40rem;
+  margin: 0 auto var(--space-6);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.bag__wrap {
+  max-width: 56rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+
+.bag__empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.bag__empty-text {
+  margin: 0;
+  color: var(--color-ink-soft);
+}
+
+.bag__body {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.bag__list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bag__item {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr auto;
+  grid-template-areas:
+    'icon info remove'
+    'qty qty total';
+  align-items: center;
+  gap: 0.6rem var(--space-3);
+  padding: var(--space-3);
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+}
+
+.bag__item-icon {
+  grid-area: icon;
+  display: grid;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-rose-400), var(--color-gold));
+  color: #fff;
+}
+
+.bag__item-icon svg {
+  width: 50%;
+  height: 50%;
+}
+
+.bag__item-info {
+  grid-area: info;
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.bag__item-category {
+  margin: 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.bag__item-name {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-ink);
+}
+
+.bag__item-price {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+}
+
+.bag__item-qty {
+  grid-area: qty;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 0.15rem 0.4rem;
+}
+
+.bag__qty-btn {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-rose-700);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bag__qty-btn:hover,
+.bag__qty-btn:focus-visible {
+  background: var(--color-rose-100);
+}
+
+.bag__qty-value {
+  min-width: 1.4rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.bag__item-total {
+  grid-area: total;
+  justify-self: end;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.bag__remove {
+  grid-area: remove;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.bag__remove svg {
+  width: 55%;
+  height: 55%;
+}
+
+.bag__remove:hover,
+.bag__remove:focus-visible {
+  background: var(--color-rose-100);
+  color: var(--color-rose-700);
+}
+
+@media (min-width: 600px) {
+  .bag__item {
+    grid-template-columns: 3.2rem 1fr auto auto auto;
+    grid-template-areas: 'icon info qty total remove';
+  }
+
+  .bag__item-qty {
+    justify-self: center;
+  }
+}
+
+.bag__summary {
+  display: grid;
+  gap: 0.8rem;
+  padding: var(--space-4);
+  background: var(--color-cream);
+  border-radius: 16px;
+}
+
+.bag__summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+
+.bag__summary-row--total {
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--color-line);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+}
+
+.bag__checkout {
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   5. Buttons
+   One shared, minimal button style: outlined, uppercase, wide letter
+   spacing, fills in on hover. Restraint here is deliberate — a single
+   confident CTA reads as "premium"; lots of competing button styles do not.
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-block;
+  padding: 0.9em 2em;
+  border: 1px solid var(--color-rose-700);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--color-rose-700);
+  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background: var(--color-rose-900);
+  border-color: var(--color-rose-900);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   6. Footer
+   Fully centered, three stacked rows: social icons, then a single nav
+   row, then a visually separate "footer-bottom" bar for the copyright.
+   Flexbox (not grid) for the icon/nav rows — each is a simple
+   one-dimensional row that just needs to center its items with an even
+   gap, which is exactly what `justify-content: center` + `gap` is for.
+   Two shades of the same dark rose give the two bands their separation:
+   `--color-rose-900` for the main footer, `--color-rose-950` (a touch
+   darker) for the bottom bar, plus a faint top border to sharpen the seam.
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background: var(--color-rose-900);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.site-footer__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+/* Row 1: social icons. Each `<a>` is a fixed-size circle (equal width/height
+   + border-radius: 50%) centering its SVG with `place-items: center`, so
+   the circle stays perfectly round regardless of the icon's own shape. */
+.site-footer__social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-footer__social a {
+  display: grid;
+  place-items: center;
+  width: clamp(2rem, 5vw + 1rem, 2.4rem);
+  height: clamp(2rem, 5vw + 1rem, 2.4rem);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: #fff;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.site-footer__social a:hover,
+.site-footer__social a:focus-visible {
+  transform: scale(1.08);
+  opacity: 0.8;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.site-footer__social svg {
+  width: 50%;
+  height: 50%;
+}
+
+/* Row 2: a single horizontal nav row. `flex-wrap: wrap` is the mobile
+   handling required here — if four links don't fit on one line at a
+   narrow width, they simply wrap onto a second centered line instead of
+   shrinking or overflowing. */
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.site-footer__nav a {
+  padding-bottom: 2px;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.site-footer__nav a:hover,
+.site-footer__nav a:focus-visible {
+  opacity: 0.8;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Row 3: the footer-bottom bar. A darker shade + a faint top border reads
+   as a clearly separate band from the main footer above it, without
+   needing a hard line or a totally different color. */
+.site-footer__bottom {
+  background: var(--color-rose-950);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+}
+
+.site-footer__copyright {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   7. Responsive breakpoints (mobile-first: min-width layers on top)
+   -------------------------------------------------------------------------- */
+@media (min-width: 600px) {
+  .site-header {
+    padding: var(--space-4) var(--space-5);
+  }
+}
+
+@media (min-width: 600px) {
+  .features__grid,
+  .catalog__grid,
+  .why-us__grid,
+  .delivery__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .hero__container {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+  }
+
+  .features__grid,
+  .why-us__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .catalog__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    width: 100%;
+    padding-inline: var(--space-6);
+  }
+
+  .hero {
+    padding-block: var(--space-6);
+  }
+
+  .hero__container,
+  .features__grid,
+  .catalog__grid {
+    padding-inline: var(--space-6);
+  }
+}
+
+/* Touch target sizing (mobile + tablet, ≤768px): every clickable control a
+   visitor might tap gets a real 44px minimum in at least one dimension —
+   the WCAG/Apple/Material baseline for a comfortably tappable target.
+   Desktop keeps the original, more compact sizing since those controls are
+   mouse-driven there. `display: inline-flex` + centering is added wherever
+   a control's text/icon was previously centered only via padding/line-height,
+   so growing the box doesn't throw off the content inside it. */
+@media (max-width: 768px) {
+  .btn,
+  .site-header__cta,
+  .product-card__add,
+  .bag__checkout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .site-header__bag,
+  .bag__remove {
+    width: 44px;
+    height: 44px;
+  }
+
+  .bag__qty-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  .site-footer__social a {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Animations
+   Small, purposeful motion: a soft entrance for hero copy, gently drifting
+   background blobs, and a floating product card. `prefers-reduced-motion`
+   is respected below so nothing moves for users who've asked for that.
+   -------------------------------------------------------------------------- */
+@keyframes blobFloatA {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-4%, 4%) scale(1.08);
+  }
+}
+
+@keyframes blobFloatB {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5%, -5%) scale(0.95);
+  }
+}
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes arrowWiggle {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__blob,
+  .hero__window,
+  .hero__arrow,
+  [data-reveal],
+  .step__num,
+  .step__connector,
+  .step__card,
+  .step__icon,
+  .step__title,
+  .step__kicker,
+  .step__text {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+  }
+
+  /* The FAQ accordion's motion is a meaningful state change (open/closed),
+     not decorative — so unlike the rules above we keep `transform` and
+     `max-height` working, just instantly instead of animated. */
+  .faq-item,
+  .faq-item__question,
+  .faq-item__chevron,
+  .faq-item__answer {
+    transition-duration: 0.01ms !important;
+  }
+}
