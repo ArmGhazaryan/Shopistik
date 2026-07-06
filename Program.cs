@@ -33,7 +33,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors();
 
-// Serves static frontend files from /wwwroot (pages, styles, scripts).
+// Serves static frontend files from /wwwroot; index.html at the root is
+// picked up automatically by UseDefaultFiles for "/".
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
