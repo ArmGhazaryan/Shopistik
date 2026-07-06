@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Shopistik.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "root"
+});
 
 // --- Services ---
 builder.Services.AddControllers();
@@ -33,8 +37,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors();
 
-// Serves static frontend files from /wwwroot; index.html at the root is
-// picked up automatically by UseDefaultFiles for "/".
+// Serves static frontend files from /root (configured as WebRootPath above);
+// index.html there is picked up automatically by UseDefaultFiles for "/".
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

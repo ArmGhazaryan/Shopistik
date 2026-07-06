@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- WebRootPath is "root" (not the SDK's default "wwwroot"), so its static
+         files must be included for publish/copy explicitly. -->
+    <Content Include="root/**" CopyToPublishDirectory="PreserveNewest" Exclude="root/**/*.user" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
