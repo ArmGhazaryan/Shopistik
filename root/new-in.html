@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="icon" type="image/png" href="images/logo.png" />
@@ -21,124 +21,164 @@
       <span class="site-header__logo-name">Shopistik</span>
     </a>
     <nav class="site-header__nav" id="siteHeaderNav">
-      <a href="new-in.html">New In</a>
-      <a href="skincare.html">Skincare</a>
-      <a href="makeup.html">Makeup</a>
-      <a href="bestsellers.html">Bestsellers</a>
-      <a href="about.html">About</a>
+      <a href="new-in.html" data-i18n="newIn">New In</a>
+      <a href="skincare.html" data-i18n="skincare">Skincare</a>
+      <a href="makeup.html" data-i18n="makeup">Makeup</a>
+      <a href="bestsellers.html" data-i18n="bestsellers">Bestsellers</a>
+      <a href="about.html" data-i18n="aboutUs">About</a>
     </nav>
-    <a class="site-header__cta" href="catalog.html">Shop Now</a>
-    <button class="site-header__toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="siteHeaderNav">
+    <div class="site-header__actions">
+    <a class="site-header__cta" href="catalog.html" data-i18n="shopNow">Shop Now</a>
+    <div class="lang-switcher">
+      <button type="button" class="lang-switcher__button" aria-haspopup="true" aria-expanded="false" aria-label="Select language">
+        <span class="lang-switcher__flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#00247d" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#fff" stroke-width="3" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#cf142b" stroke-width="1.2" /><path d="M10,0 V14 M0,7 H20" stroke="#fff" stroke-width="4.5" /><path d="M10,0 V14 M0,7 H20" stroke="#cf142b" stroke-width="2.5" /></svg></span>
+        <span class="lang-switcher__current">EN</span>
+        <svg class="lang-switcher__chevron" viewBox="0 0 10 6" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <ul class="lang-switcher__menu" role="menu" aria-label="Language">
+        <li role="none">
+          <button type="button" class="lang-switcher__option is-active" role="menuitemradio" aria-checked="true" data-lang="en">
+            <span class="lang-switcher__option-flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#00247d" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#fff" stroke-width="3" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#cf142b" stroke-width="1.2" /><path d="M10,0 V14 M0,7 H20" stroke="#fff" stroke-width="4.5" /><path d="M10,0 V14 M0,7 H20" stroke="#cf142b" stroke-width="2.5" /></svg></span>
+            <span class="lang-switcher__option-label">English</span>
+            <svg class="lang-switcher__check" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </li>
+        <li role="none">
+          <button type="button" class="lang-switcher__option" role="menuitemradio" aria-checked="false" data-lang="ru">
+            <span class="lang-switcher__option-flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#fff" /><rect width="20" height="4.67" y="4.67" fill="#0039a6" /><rect width="20" height="4.67" y="9.33" fill="#d52b1e" /></svg></span>
+            <span class="lang-switcher__option-label">Русский</span>
+            <svg class="lang-switcher__check" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </li>
+        <li role="none">
+          <button type="button" class="lang-switcher__option" role="menuitemradio" aria-checked="false" data-lang="hy">
+            <span class="lang-switcher__option-flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="4.67" y="0" fill="#d90012" /><rect width="20" height="4.67" y="4.67" fill="#0033a0" /><rect width="20" height="4.67" y="9.33" fill="#f2a800" /></svg></span>
+            <span class="lang-switcher__option-label">Հայերեն</span>
+            <svg class="lang-switcher__check" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <button class="site-header__toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="siteHeaderNav" data-i18n-aria="menu">
       <svg class="site-header__toggle-icon site-header__toggle-icon--open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
       <svg class="site-header__toggle-icon site-header__toggle-icon--close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
-    <a class="site-header__bag" href="bag.html" aria-label="Shopping bag">
+    <a class="site-header__bag" href="bag.html" aria-label="Shopping bag" data-i18n-aria="bag">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
       <span class="site-header__bag-count" data-bag-count hidden>0</span>
     </a>
+    </div>
   </header>
 
   <main>
     <section class="catalog">
       <div class="catalog__head">
-        <p class="catalog__eyebrow">Just Landed</p>
-        <h1 class="catalog__title">New In</h1>
-        <p class="catalog__intro">Freshly arrived skincare and makeup from Europe and the US — the first to hit our shelves this season.</p>
+        <p class="catalog__eyebrow" data-i18n="newInEyebrow">Just Landed</p>
+        <h1 class="catalog__title" data-i18n="newIn">New In</h1>
+        <p class="catalog__intro" data-i18n="newInIntro">Freshly arrived skincare and makeup from Europe and the US — the first to hit our shelves this season.</p>
       </div>
 
       <div class="catalog__grid">
         <article class="product-card">
           <div class="product-card__media product-card__media--three">
-            <span class="product-card__tag">New</span>
+            <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="11" y="12" width="10" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M14 12V6a2 2 0 012-2 2 2 0 012 2v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M13 18h6" stroke="currentColor" stroke-width="1.6" /></svg>
           </div>
           <div class="product-card__body">
-            <p class="product-card__category">Skincare</p>
+            <p class="product-card__category" data-i18n="skincare">Skincare</p>
             <h3 class="product-card__name">Dew Drop Cleansing Oil</h3>
-            <p class="product-card__desc">Melts away makeup &amp; impurities</p>
+            <p class="product-card__desc" data-i18n="prodDewDrop">Melts away makeup &amp; impurities</p>
             <div class="product-card__row">
               <span class="product-card__price">$32</span>
-              <button class="product-card__add" type="button">Add to Bag</button>
+              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
         </article>
 
         <article class="product-card">
           <div class="product-card__media product-card__media--two">
-            <span class="product-card__tag">New</span>
+            <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="10" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M11 8.5c1.5-2 3.2-3 5-3s3.5 1 5 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
           </div>
           <div class="product-card__body">
-            <p class="product-card__category">Makeup</p>
+            <p class="product-card__category" data-i18n="makeup">Makeup</p>
             <h3 class="product-card__name">Silk Cushion Foundation</h3>
-            <p class="product-card__desc">Buildable, natural finish</p>
+            <p class="product-card__desc" data-i18n="prodSilkFoundation">Buildable, natural finish</p>
             <div class="product-card__row">
               <span class="product-card__price">$36</span>
-              <button class="product-card__add" type="button">Add to Bag</button>
+              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
         </article>
 
         <article class="product-card">
           <div class="product-card__media product-card__media--four">
-            <span class="product-card__tag">New</span>
+            <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="8" y="12" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6" /><ellipse cx="16" cy="12" rx="8" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M11 18h10" stroke="currentColor" stroke-width="1.6" /></svg>
           </div>
           <div class="product-card__body">
-            <p class="product-card__category">Skincare</p>
+            <p class="product-card__category" data-i18n="skincare">Skincare</p>
             <h3 class="product-card__name">Velvet Night Repair Cream</h3>
-            <p class="product-card__desc">Overnight renewal &amp; deep hydration</p>
+            <p class="product-card__desc" data-i18n="prodVelvetNight">Overnight renewal &amp; deep hydration</p>
             <div class="product-card__row">
               <span class="product-card__price">$56</span>
-              <button class="product-card__add" type="button">Add to Bag</button>
+              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
         </article>
 
         <article class="product-card">
           <div class="product-card__media product-card__media--one">
-            <span class="product-card__tag">New</span>
+            <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="12" cy="14" r="1" fill="currentColor" /><circle cx="20" cy="14" r="1" fill="currentColor" /><circle cx="16" cy="20" r="1" fill="currentColor" /><circle cx="12" cy="21" r="1" fill="currentColor" /><circle cx="20" cy="21" r="1" fill="currentColor" /></svg>
           </div>
           <div class="product-card__body">
-            <p class="product-card__category">Makeup</p>
+            <p class="product-card__category" data-i18n="makeup">Makeup</p>
             <h3 class="product-card__name">Sheer Veil Setting Powder</h3>
-            <p class="product-card__desc">Blurs pores, controls shine</p>
+            <p class="product-card__desc" data-i18n="prodSheerVeilPowder">Blurs pores, controls shine</p>
             <div class="product-card__row">
               <span class="product-card__price">$31</span>
-              <button class="product-card__add" type="button">Add to Bag</button>
+              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
         </article>
 
         <article class="product-card">
           <div class="product-card__media product-card__media--two">
-            <span class="product-card__tag">New</span>
+            <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="9" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="16" cy="17" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
           </div>
           <div class="product-card__body">
-            <p class="product-card__category">Skincare</p>
+            <p class="product-card__category" data-i18n="skincare">Skincare</p>
             <h3 class="product-card__name">Bright Eyes Cream</h3>
-            <p class="product-card__desc">De-puffs &amp; brightens the eye area</p>
+            <p class="product-card__desc" data-i18n="prodBrightEyes">De-puffs &amp; brightens the eye area</p>
             <div class="product-card__row">
               <span class="product-card__price">$34</span>
-              <button class="product-card__add" type="button">Add to Bag</button>
+              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
         </article>
 
         <article class="product-card">
           <div class="product-card__media product-card__media--three">
-            <span class="product-card__tag">New</span>
+            <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="10" width="22" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="12.5" cy="17" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="19.5" cy="17" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
           </div>
           <div class="product-card__body">
-            <p class="product-card__category">Makeup</p>
+            <p class="product-card__category" data-i18n="makeup">Makeup</p>
             <h3 class="product-card__name">Rose Petal Blush Duo</h3>
-            <p class="product-card__desc">Buildable flush of colour</p>
+            <p class="product-card__desc" data-i18n="prodRosePetalBlush">Buildable flush of colour</p>
             <div class="product-card__row">
               <span class="product-card__price">$26</span>
-              <button class="product-card__add" type="button">Add to Bag</button>
+              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
         </article>
@@ -185,18 +225,19 @@
       </ul>
 
       <nav class="site-footer__nav" aria-label="Footer">
-        <a href="index.html">Home</a>
-        <a href="catalog.html">Shop All</a>
-        <a href="about.html">About</a>
-        <a href="#">Contact Us</a>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="catalog.html" data-i18n="catalog">Shop All</a>
+        <a href="about.html" data-i18n="aboutUs">About</a>
+        <a href="#" data-i18n="contactUs">Contact Us</a>
       </nav>
     </div>
 
     <div class="site-footer__bottom">
-      <p class="site-footer__copyright">Copyright &copy; 2026 Shopistik. All rights reserved.</p>
+      <p class="site-footer__copyright">Copyright &copy; 2026 Shopistik. <span data-i18n="copyright">All rights reserved.</span></p>
     </div>
   </footer>
 
+  <script src="scripts/translations.js"></script>
   <script src="scripts/main.js"></script>
 </body>
 </html>

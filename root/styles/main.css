@@ -32,9 +32,13 @@
   --color-rose-900: #5c2f2c;
   --color-rose-950: #462420;
 
-  /* Type */
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+  /* Type — Noto Sans is the primary family everywhere (headings included),
+     since it natively covers Latin, Cyrillic and Armenian glyphs, which the
+     site needs for its English/Russian/Armenian translations (see
+     scripts/translations.js). The old display/sans fonts stay only as a
+     fallback for the rare case the Google Fonts request itself fails. */
+  --font-display: 'Noto Sans', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
 
   /* Layout */
   --container-max: 1200px;
@@ -101,6 +105,7 @@ h3 {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
+  min-height: 4.5rem;
   padding: var(--space-4) var(--space-4);
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-line);
@@ -129,6 +134,7 @@ h3 {
 
 .site-header__nav {
   display: none;
+  align-items: center;
   gap: var(--space-4);
   font-size: 0.72rem;
   letter-spacing: 0.14em;
@@ -141,8 +147,15 @@ h3 {
   }
 }
 
+/* `white-space: nowrap` guarantees a link's own label is never the thing
+   that wraps — every language's nav item is always exactly one line, so
+   the nav's height never changes per-language. The actual fix for the
+   Armenian nav overflowing the row entirely (see the `[lang="hy"]`
+   overrides below) is separate from this: this only protects against a
+   single very long word wrapping mid-link. */
 .site-header__nav a {
   padding-bottom: 2px;
+  white-space: nowrap;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
@@ -193,8 +206,83 @@ h3 {
   }
 }
 
+/* Armenian nav labels (Նորույթներ, Մաշկի խնամք, Դիմահարդարում,
+   Բեսթսելլերներ, Մեր մասին) are simply wider words than their English or
+   Russian equivalents at the *same* font-size/letter-spacing — full size
+   is kept identical across every language on purpose, so instead of
+   shrinking the text, Armenian keeps using the same mobile-style
+   hamburger menu a bit longer than other languages, and switches over to
+   the horizontal nav once the viewport is wide enough to fit it at full
+   size (see the `html[lang='hy'] .site-header` cap increase above, which
+   handles the rest of the range). `document.documentElement`'s `lang`
+   attribute already flips to "hy" on switch (scripts/translations.js), so
+   this is a pure CSS override — no extra JS needed. This duplicates the
+   ≤899px dropdown-panel rules above because that block is intentionally
+   scoped to only the small-screen case; Armenian needs the identical
+   panel behaviour over a wider range. */
+@media (min-width: 900px) and (max-width: 1219px) {
+  html[lang='hy'] .site-header__nav {
+    display: none;
+  }
+
+  html[lang='hy'] .site-header__toggle {
+    display: grid;
+  }
+
+  html[lang='hy'] .site-header {
+    position: relative;
+  }
+
+  html[lang='hy'] .site-header.nav-open .site-header__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: var(--space-2) var(--space-4) var(--space-3);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+    box-shadow: 0 24px 40px -20px rgba(32, 29, 26, 0.3);
+    z-index: 30;
+  }
+
+  html[lang='hy'] .site-header.nav-open .site-header__nav a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.6rem 0.25rem;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  html[lang='hy'] .site-header.nav-open .site-header__nav a:last-child {
+    border-bottom: none;
+  }
+}
+
+/* Groups the CTA, language switcher, mobile menu toggle and bag icon into
+   one atomic unit. Without this, `.site-header`'s own `flex-wrap: wrap`
+   would let any of these wrap onto a new line individually — which is
+   exactly what happened with longer "Shop Now" translations (e.g. Russian
+   "Купить сейчас" or Armenian "Գնել հիմա"): the row ran out of space and
+   only the last item, the bag icon, got bumped down onto its own line.
+   Keeping them in a single `flex-shrink: 0` flex item means that if there
+   isn't room, the *whole* cluster wraps below the logo/nav together
+   instead of splitting apart. */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  gap: var(--space-3);
+}
+
 .site-header__cta {
   display: none;
+  flex-shrink: 0;
   padding: 0.7em 1.6em;
   border-radius: 999px;
   background: var(--color-rose-700);
@@ -202,6 +290,7 @@ h3 {
   font-size: 0.7rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
+  white-space: nowrap;
   transition: background-color 0.25s ease, transform 0.25s ease;
 }
 
@@ -307,6 +396,191 @@ h3 {
   .site-header__toggle {
     display: none;
   }
+}
+
+/* Language switcher: a custom button + menu (not a native <select>) so each
+   option can carry a flag, a full language name, and a checkmark on the
+   active one, and so opening/closing can actually be animated — a native
+   select's own dropdown is painted by the OS and can't be styled or
+   transitioned in any browser. Sits between the "Shop Now" CTA and the
+   mobile menu toggle so it's reachable at every breakpoint. */
+.lang-switcher {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.lang-switcher__button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.15rem;
+  padding: 0 0.75rem 0 0.7rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-ink-soft);
+  background: var(--color-cream);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.lang-switcher__button:hover,
+.lang-switcher__button:focus-visible,
+.lang-switcher.is-open .lang-switcher__button {
+  border-color: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.lang-switcher__button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.lang-switcher__flag {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(32, 29, 26, 0.08);
+  transition: opacity 0.15s ease;
+}
+
+.lang-switcher__flag svg,
+.lang-switcher__option-flag svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.lang-switcher__current {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.15s ease;
+}
+
+/* The chevron rotates open/closed instead of swapping to a separate
+   "up" icon — one element, one transform, no layout shift. */
+.lang-switcher__chevron {
+  flex-shrink: 0;
+  width: 9px;
+  height: 6px;
+  transition: transform 0.2s ease;
+}
+
+.lang-switcher.is-open .lang-switcher__chevron {
+  transform: rotate(180deg);
+}
+
+/* The menu stays in the DOM (never `display: none`) so both the opening
+   and closing states can transition. `visibility` is delayed on the way
+   out only, via the transition-delay on that property, so the closed menu
+   drops out of hit-testing/tab order only once its fade-out has finished —
+   never sitting invisibly on top of the page, and never need for JS to
+   toggle a "hidden" attribute on a timer. */
+.lang-switcher__menu {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 40;
+  min-width: 180px;
+  margin: 0;
+  padding: 0.4rem;
+  list-style: none;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  box-shadow: 0 24px 40px -20px rgba(32, 29, 26, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0.2s;
+}
+
+.lang-switcher.is-open .lang-switcher__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s linear 0s;
+}
+
+.lang-switcher__option {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: none;
+  border-radius: 9px;
+  color: var(--color-ink-soft);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.lang-switcher__option:hover,
+.lang-switcher__option:focus-visible {
+  background: var(--color-rose-100);
+  color: var(--color-ink);
+}
+
+/* The active language is distinguished two ways at once — a tinted
+   background/bold label plus the checkmark below — so it still reads
+   clearly for users who rely on color alone or on the icon alone. */
+.lang-switcher__option.is-active {
+  background: var(--color-rose-50);
+  color: var(--color-rose-700);
+  font-weight: 700;
+}
+
+.lang-switcher__option-flag {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(32, 29, 26, 0.08);
+}
+
+.lang-switcher__option-label {
+  flex: 1;
+}
+
+.lang-switcher__check {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--color-rose-700);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.lang-switcher__option.is-active .lang-switcher__check {
+  opacity: 1;
+}
+
+/* Language-switch text fade: every translated string (see the
+   `[data-i18n]` elements throughout the page) and the switcher's own
+   flag/code briefly fade out, get swapped, then fade back in — see
+   `scripts/translations.js` for the class that toggles this. Declaring the
+   transition here, permanently, means the JS only ever has to add/remove
+   one class; it never has to fight a "flash of unstyled content" because
+   the opacity starts at its rest value (1) until that class says otherwise. */
+[data-i18n] {
+  transition: opacity 0.15s ease;
+}
+
+body.i18n-fading [data-i18n],
+body.i18n-fading .lang-switcher__flag,
+body.i18n-fading .lang-switcher__current {
+  opacity: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -1934,6 +2208,17 @@ h3 {
     padding-inline: var(--space-6);
   }
 
+  /* Armenian's nav labels are wide enough, at full size, that the header
+     was permanently capped below the width they need — see the
+     `html[lang='hy']` breakpoint overrides further down for the full
+     explanation. Widening just the header's own cap (not the shared
+     `--container-max` used by every other section) gives Armenian the
+     ~75px of extra room it needs on real desktop screens, without
+     touching the logo/nav/CTA's actual font size or spacing at all. */
+  html[lang='hy'] .site-header {
+    max-width: 1280px;
+  }
+
   .hero {
     padding-block: var(--space-6);
   }
@@ -1977,6 +2262,10 @@ h3 {
 
   .site-footer__social a {
     width: 44px;
+    height: 44px;
+  }
+
+  .lang-switcher__button {
     height: 44px;
   }
 }
@@ -2052,11 +2341,20 @@ h3 {
 
   /* The FAQ accordion's motion is a meaningful state change (open/closed),
      not decorative — so unlike the rules above we keep `transform` and
-     `max-height` working, just instantly instead of animated. */
+     `max-height` working, just instantly instead of animated. The language
+     switcher's open/close and text-swap fades are the same kind of
+     functional motion, so they get the same treatment. */
   .faq-item,
   .faq-item__question,
   .faq-item__chevron,
-  .faq-item__answer {
+  .faq-item__answer,
+  .lang-switcher__menu,
+  .lang-switcher__chevron,
+  .lang-switcher__option,
+  .lang-switcher__check,
+  .lang-switcher__flag,
+  .lang-switcher__current,
+  [data-i18n] {
     transition-duration: 0.01ms !important;
   }
 }

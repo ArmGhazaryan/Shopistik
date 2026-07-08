@@ -9,7 +9,7 @@
   <!-- Google Fonts: a serif display face for the brand/headings, a light sans for everything else -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="icon" type="image/png" href="images/logo.png" />
@@ -22,21 +22,61 @@
       <span class="site-header__logo-name">Shopistik</span>
     </a>
     <nav class="site-header__nav" id="siteHeaderNav">
-      <a href="new-in.html">New In</a>
-      <a href="skincare.html">Skincare</a>
-      <a href="makeup.html">Makeup</a>
-      <a href="bestsellers.html">Bestsellers</a>
-      <a href="about.html">About</a>
+      <a href="new-in.html" data-i18n="newIn">New In</a>
+      <a href="skincare.html" data-i18n="skincare">Skincare</a>
+      <a href="makeup.html" data-i18n="makeup">Makeup</a>
+      <a href="bestsellers.html" data-i18n="bestsellers">Bestsellers</a>
+      <a href="about.html" data-i18n="aboutUs">About</a>
     </nav>
-    <a class="site-header__cta" href="catalog.html">Shop Now</a>
-    <button class="site-header__toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="siteHeaderNav">
+    <div class="site-header__actions">
+    <a class="site-header__cta" href="catalog.html" data-i18n="shopNow">Shop Now</a>
+    <div class="lang-switcher">
+      <button type="button" class="lang-switcher__button" aria-haspopup="true" aria-expanded="false" aria-label="Select language">
+        <span class="lang-switcher__flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#00247d" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#fff" stroke-width="3" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#cf142b" stroke-width="1.2" /><path d="M10,0 V14 M0,7 H20" stroke="#fff" stroke-width="4.5" /><path d="M10,0 V14 M0,7 H20" stroke="#cf142b" stroke-width="2.5" /></svg></span>
+        <span class="lang-switcher__current">EN</span>
+        <svg class="lang-switcher__chevron" viewBox="0 0 10 6" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <ul class="lang-switcher__menu" role="menu" aria-label="Language">
+        <li role="none">
+          <button type="button" class="lang-switcher__option is-active" role="menuitemradio" aria-checked="true" data-lang="en">
+            <span class="lang-switcher__option-flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#00247d" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#fff" stroke-width="3" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#cf142b" stroke-width="1.2" /><path d="M10,0 V14 M0,7 H20" stroke="#fff" stroke-width="4.5" /><path d="M10,0 V14 M0,7 H20" stroke="#cf142b" stroke-width="2.5" /></svg></span>
+            <span class="lang-switcher__option-label">English</span>
+            <svg class="lang-switcher__check" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </li>
+        <li role="none">
+          <button type="button" class="lang-switcher__option" role="menuitemradio" aria-checked="false" data-lang="ru">
+            <span class="lang-switcher__option-flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#fff" /><rect width="20" height="4.67" y="4.67" fill="#0039a6" /><rect width="20" height="4.67" y="9.33" fill="#d52b1e" /></svg></span>
+            <span class="lang-switcher__option-label">Русский</span>
+            <svg class="lang-switcher__check" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </li>
+        <li role="none">
+          <button type="button" class="lang-switcher__option" role="menuitemradio" aria-checked="false" data-lang="hy">
+            <span class="lang-switcher__option-flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="4.67" y="0" fill="#d90012" /><rect width="20" height="4.67" y="4.67" fill="#0033a0" /><rect width="20" height="4.67" y="9.33" fill="#f2a800" /></svg></span>
+            <span class="lang-switcher__option-label">Հայերեն</span>
+            <svg class="lang-switcher__check" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <button class="site-header__toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="siteHeaderNav" data-i18n-aria="menu">
       <svg class="site-header__toggle-icon site-header__toggle-icon--open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
       <svg class="site-header__toggle-icon site-header__toggle-icon--close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
-    <a class="site-header__bag" href="bag.html" aria-label="Shopping bag">
+    <a class="site-header__bag" href="bag.html" aria-label="Shopping bag" data-i18n-aria="bag">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
       <span class="site-header__bag-count" data-bag-count hidden>0</span>
     </a>
+    </div>
   </header>
 
   <main>
@@ -51,11 +91,11 @@
             <span class="hero__heading-accent">favourite</span> beauty<br />
             ritual
           </h1>
-          <p class="hero__tagline">Shopistik curates luxury skincare &amp; makeup, thoughtfully matched to every complexion.</p>
+          <p class="hero__tagline" data-i18n="heroTagline">Shopistik curates luxury skincare &amp; makeup, thoughtfully matched to every complexion.</p>
           <div class="hero__actions">
-            <a class="btn" href="catalog.html">Shop the Collection</a>
+            <a class="btn" href="catalog.html" data-i18n="heroCta1">Shop the Collection</a>
             <a class="hero__see-more" href="catalog.html">
-              <span>See for yourself</span>
+              <span data-i18n="heroCta2">See for yourself</span>
               <svg class="hero__arrow" viewBox="0 0 64 40" aria-hidden="true">
                 <path d="M2 8c16 20 34 22 52 12M42 8l12 12-6 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -146,8 +186,8 @@
               <path class="feature__badge-check" d="M8.5 12.2l2.3 2.3 4.7-4.9" />
             </svg>
           </span>
-          <h3 class="feature__title">Clean formulas</h3>
-          <p class="feature__text">Every product is dermatologist-tested and free from parabens, sulfates and harsh additives your skin never needed.</p>
+          <h3 class="feature__title" data-i18n="featureTitle1">Clean formulas</h3>
+          <p class="feature__text" data-i18n="featureText1">Every product is dermatologist-tested and free from parabens, sulfates and harsh additives your skin never needed.</p>
         </article>
 
         <article class="feature">
@@ -157,8 +197,8 @@
               <path class="feature__badge-check" d="M8.5 12.2l2.3 2.3 4.7-4.9" />
             </svg>
           </span>
-          <h3 class="feature__title">Cruelty-free</h3>
-          <p class="feature__text">We never test on animals, and we never will. Every formula is proudly vegan-friendly and certified cruelty-free.</p>
+          <h3 class="feature__title" data-i18n="featureTitle2">Cruelty-free</h3>
+          <p class="feature__text" data-i18n="featureText2">We never test on animals, and we never will. Every formula is proudly vegan-friendly and certified cruelty-free.</p>
         </article>
 
         <article class="feature">
@@ -168,8 +208,8 @@
               <path class="feature__badge-check" d="M8.5 12.2l2.3 2.3 4.7-4.9" />
             </svg>
           </span>
-          <h3 class="feature__title">Fast, free shipping</h3>
-          <p class="feature__text">Orders over $50 ship free and arrive within 2–4 days, beautifully packaged and ready to gift or enjoy.</p>
+          <h3 class="feature__title" data-i18n="featureTitle3">Fast, free shipping</h3>
+          <p class="feature__text" data-i18n="featureText3">Orders over $50 ship free and arrive within 2–4 days, beautifully packaged and ready to gift or enjoy.</p>
         </article>
 
         <article class="feature">
@@ -179,17 +219,17 @@
               <path class="feature__badge-check" d="M8.5 12.2l2.3 2.3 4.7-4.9" />
             </svg>
           </span>
-          <h3 class="feature__title">Loved &amp; trusted</h3>
-          <p class="feature__text">Over 2,300 five-star reviews from people who made Shopistik a treasured part of their daily ritual.</p>
+          <h3 class="feature__title" data-i18n="featureTitle4">Loved &amp; trusted</h3>
+          <p class="feature__text" data-i18n="featureText4">Over 2,300 five-star reviews from people who made Shopistik a treasured part of their daily ritual.</p>
         </article>
       </div>
     </section>
 
     <section class="steps">
       <div class="steps__head" data-reveal>
-        <p class="steps__eyebrow">The Ritual</p>
-        <h2 class="steps__title">How it works</h2>
-        <p class="steps__intro">From first discovery to a routine you'll adore, getting started with Shopistik takes just a few thoughtful steps.</p>
+        <p class="steps__eyebrow" data-i18n="stepsEyebrow">The Ritual</p>
+        <h2 class="steps__title" data-i18n="stepsTitle">How it works</h2>
+        <p class="steps__intro" data-i18n="stepsIntro">From first discovery to a routine you'll adore, getting started with Shopistik takes just a few thoughtful steps.</p>
       </div>
 
       <ol class="steps__list">
@@ -201,9 +241,9 @@
               <svg viewBox="0 0 32 32"><circle cx="14" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="2" /><path d="M20 20l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
             </span>
             <div class="step__copy">
-              <h3 class="step__title">Discover your ritual</h3>
-              <p class="step__kicker">Find your perfect match&hellip;</p>
-              <p class="step__text">Take our two-minute skin quiz or browse expertly curated edits to discover products chosen for your skin type and goals.</p>
+              <h3 class="step__title" data-i18n="step1Title">Discover your ritual</h3>
+              <p class="step__kicker" data-i18n="step1Kicker">Find your perfect match&hellip;</p>
+              <p class="step__text" data-i18n="step1Text">Take our two-minute skin quiz or browse expertly curated edits to discover products chosen for your skin type and goals.</p>
             </div>
           </div>
         </li>
@@ -216,9 +256,9 @@
               <svg viewBox="0 0 32 32"><rect x="7" y="5" width="18" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="2" /><path d="M12 12h8M12 17h8M12 22h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
             </span>
             <div class="step__copy">
-              <h3 class="step__title">Build your routine</h3>
-              <p class="step__kicker">Add to your bag&hellip;</p>
-              <p class="step__text">Mix and match cleansers, serums and treatments into a routine that works together, with friendly guidance at every step.</p>
+              <h3 class="step__title" data-i18n="step2Title">Build your routine</h3>
+              <p class="step__kicker" data-i18n="step2Kicker">Add to your bag&hellip;</p>
+              <p class="step__text" data-i18n="step2Text">Mix and match cleansers, serums and treatments into a routine that works together, with friendly guidance at every step.</p>
             </div>
           </div>
         </li>
@@ -231,9 +271,9 @@
               <svg viewBox="0 0 32 32"><path d="M4 11l12-6 12 6-12 6-12-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /><path d="M4 11v10l12 6 12-6V11" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /><path d="M16 17v10" stroke="currentColor" stroke-width="2" /></svg>
             </span>
             <div class="step__copy">
-              <h3 class="step__title">Fast, free delivery</h3>
-              <p class="step__kicker">Beautifully packaged&hellip;</p>
-              <p class="step__text">Orders over $50 ship free and arrive within 2–4 days, wrapped with care and ready to enjoy or gift.</p>
+              <h3 class="step__title" data-i18n="step3Title">Fast, free delivery</h3>
+              <p class="step__kicker" data-i18n="step3Kicker">Beautifully packaged&hellip;</p>
+              <p class="step__text" data-i18n="step3Text">Orders over $50 ship free and arrive within 2–4 days, wrapped with care and ready to enjoy or gift.</p>
             </div>
           </div>
         </li>
@@ -246,9 +286,9 @@
               <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" fill="none" stroke="currentColor" stroke-width="2" /><path d="M13 11l8 5-8 5z" fill="currentColor" /></svg>
             </span>
             <div class="step__copy">
-              <h3 class="step__title">Glow &amp; learn</h3>
-              <p class="step__kicker">Get the most from every product&hellip;</p>
-              <p class="step__text">Unlock personalised tutorials and application tips so each product delivers its very best for your skin.</p>
+              <h3 class="step__title" data-i18n="step4Title">Glow &amp; learn</h3>
+              <p class="step__kicker" data-i18n="step4Kicker">Get the most from every product&hellip;</p>
+              <p class="step__text" data-i18n="step4Text">Unlock personalised tutorials and application tips so each product delivers its very best for your skin.</p>
             </div>
           </div>
         </li>
@@ -260,9 +300,9 @@
               <svg viewBox="0 0 32 32"><path d="M16 27s-10-6.2-10-13.6A6.4 6.4 0 0116 9.3a6.4 6.4 0 0110 4.1C26 20.8 16 27 16 27z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
             </span>
             <div class="step__copy">
-              <h3 class="step__title">Loved for life</h3>
-              <p class="step__kicker">Repeat &amp; reward&hellip;</p>
-              <p class="step__text">Subscribe to save on your favourites, earn points on every order and enjoy members-only launches.</p>
+              <h3 class="step__title" data-i18n="step5Title">Loved for life</h3>
+              <p class="step__kicker" data-i18n="step5Kicker">Repeat &amp; reward&hellip;</p>
+              <p class="step__text" data-i18n="step5Text">Subscribe to save on your favourites, earn points on every order and enjoy members-only launches.</p>
             </div>
           </div>
         </li>
@@ -271,79 +311,79 @@
 
     <section class="faq">
       <div class="faq__head" data-reveal>
-        <p class="faq__eyebrow">Questions</p>
-        <h2 class="faq__title">Frequently asked questions</h2>
-        <p class="faq__intro">Everything you need to know about your Shopistik ritual — if it's not here, our team is always happy to help.</p>
+        <p class="faq__eyebrow" data-i18n="faqEyebrow">Questions</p>
+        <h2 class="faq__title" data-i18n="faqTitle">Frequently asked questions</h2>
+        <p class="faq__intro" data-i18n="faqIntro">Everything you need to know about your Shopistik ritual — if it's not here, our team is always happy to help.</p>
       </div>
 
       <div class="faq__list">
         <div class="faq-item">
           <h3 class="faq-item__heading">
             <button class="faq-item__question" type="button" aria-expanded="false" aria-controls="faq-answer-1" id="faq-question-1">
-              <span>What makes Shopistik formulas different?</span>
+              <span data-i18n="faqQ1">What makes Shopistik formulas different?</span>
               <svg class="faq-item__chevron" viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M3 5.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
           </h3>
           <div class="faq-item__answer" id="faq-answer-1" role="region" aria-labelledby="faq-question-1">
-            <p class="faq-item__answer-inner">Every formula is dermatologist-tested and free from parabens, sulfates and other harsh additives. We start from clean, effective ingredients and only add what your skin actually benefits from.</p>
+            <p class="faq-item__answer-inner" data-i18n="faqA1">Every formula is dermatologist-tested and free from parabens, sulfates and other harsh additives. We start from clean, effective ingredients and only add what your skin actually benefits from.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <h3 class="faq-item__heading">
             <button class="faq-item__question" type="button" aria-expanded="false" aria-controls="faq-answer-2" id="faq-question-2">
-              <span>How do I know which products are right for my skin?</span>
+              <span data-i18n="faqQ2">How do I know which products are right for my skin?</span>
               <svg class="faq-item__chevron" viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M3 5.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
           </h3>
           <div class="faq-item__answer" id="faq-answer-2" role="region" aria-labelledby="faq-question-2">
-            <p class="faq-item__answer-inner">Take our two-minute skin quiz to get a personalised routine, or browse our curated edits by skin type and concern. You can always message our team for one-to-one advice.</p>
+            <p class="faq-item__answer-inner" data-i18n="faqA2">Take our two-minute skin quiz to get a personalised routine, or browse our curated edits by skin type and concern. You can always message our team for one-to-one advice.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <h3 class="faq-item__heading">
             <button class="faq-item__question" type="button" aria-expanded="false" aria-controls="faq-answer-3" id="faq-question-3">
-              <span>What's your shipping and returns policy?</span>
+              <span data-i18n="faqQ3">What's your shipping and returns policy?</span>
               <svg class="faq-item__chevron" viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M3 5.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
           </h3>
           <div class="faq-item__answer" id="faq-answer-3" role="region" aria-labelledby="faq-question-3">
-            <p class="faq-item__answer-inner">Orders over $50 ship free and arrive within 2–4 days. If something isn't right for you, unopened items can be returned within 30 days of delivery for a full refund.</p>
+            <p class="faq-item__answer-inner" data-i18n="faqA3">Orders over $50 ship free and arrive within 2–4 days. If something isn't right for you, unopened items can be returned within 30 days of delivery for a full refund.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <h3 class="faq-item__heading">
             <button class="faq-item__question" type="button" aria-expanded="false" aria-controls="faq-answer-4" id="faq-question-4">
-              <span>Are your products cruelty-free and vegan?</span>
+              <span data-i18n="faqQ4">Are your products cruelty-free and vegan?</span>
               <svg class="faq-item__chevron" viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M3 5.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
           </h3>
           <div class="faq-item__answer" id="faq-answer-4" role="region" aria-labelledby="faq-question-4">
-            <p class="faq-item__answer-inner">Yes — we never test on animals, and every formula is certified cruelty-free. Most of our range is vegan-friendly; any exceptions are always clearly noted on the product page.</p>
+            <p class="faq-item__answer-inner" data-i18n="faqA4">Yes — we never test on animals, and every formula is certified cruelty-free. Most of our range is vegan-friendly; any exceptions are always clearly noted on the product page.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <h3 class="faq-item__heading">
             <button class="faq-item__question" type="button" aria-expanded="false" aria-controls="faq-answer-5" id="faq-question-5">
-              <span>Do you offer subscriptions or rewards?</span>
+              <span data-i18n="faqQ5">Do you offer subscriptions or rewards?</span>
               <svg class="faq-item__chevron" viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M3 5.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </button>
           </h3>
           <div class="faq-item__answer" id="faq-answer-5" role="region" aria-labelledby="faq-question-5">
-            <p class="faq-item__answer-inner">Subscribe to any favourite to save on every reorder, and earn points on every purchase toward members-only launches and gifts.</p>
+            <p class="faq-item__answer-inner" data-i18n="faqA5">Subscribe to any favourite to save on every reorder, and earn points on every purchase toward members-only launches and gifts.</p>
           </div>
         </div>
       </div>
@@ -389,18 +429,19 @@
       </ul>
 
       <nav class="site-footer__nav" aria-label="Footer">
-        <a href="index.html">Home</a>
-        <a href="catalog.html">Shop All</a>
-        <a href="about.html">About</a>
-        <a href="#">Contact Us</a>
+        <a href="index.html" data-i18n="home">Home</a>
+        <a href="catalog.html" data-i18n="catalog">Shop All</a>
+        <a href="about.html" data-i18n="aboutUs">About</a>
+        <a href="#" data-i18n="contactUs">Contact Us</a>
       </nav>
     </div>
 
     <div class="site-footer__bottom">
-      <p class="site-footer__copyright">Copyright &copy; 2026 Shopistik. All rights reserved.</p>
+      <p class="site-footer__copyright">Copyright &copy; 2026 Shopistik. <span data-i18n="copyright">All rights reserved.</span></p>
     </div>
   </footer>
 
+  <script src="scripts/translations.js"></script>
   <script src="scripts/main.js"></script>
 </body>
 </html>
