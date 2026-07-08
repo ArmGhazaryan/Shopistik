@@ -1,0 +1,13 @@
+RULE: Multi-language support (i18n) is mandatory for all user-facing text, going forward, without exception.
+
+Whenever you add any new section, component, page, button, heading, description, or any other visible text to this site:
+
+1. Never hardcode visible text directly in HTML. Every piece of user-facing text must use the data-i18n attribute pattern already established in this project.
+
+2. Every new data-i18n key must be added to translations.js with entries for all three supported languages: en, ru, and hy.
+
+3. If you don't know an accurate Russian or Armenian translation, do not guess or leave it in English silently. Instead, add the English text as a placeholder and clearly flag it to me at the end of your response as "needs translation review."
+
+4. Before considering any new feature "done," verify that switching the language selector to Russian and Armenian correctly updates all new text, with no leftover hardcoded English strings and no layout breaking (e.g. text overflow, wrapping issues like we saw with Armenian in the header).
+
+This applies automatically to all future prompts in this project, even if I don't explicitly mention translations in the prompt itself.

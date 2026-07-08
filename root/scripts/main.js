@@ -223,22 +223,27 @@
 
   // Every product card on the catalog/category pages has an "Add to Bag"
   // button; read the card's own text content instead of hard-coding data
-  // twice, so the bag always matches whatever the page displays.
+  // twice, so the bag always matches whatever the page displays. The
+  // category is stored by its translation *key* (e.g. "skincare"), not its
+  // display text, so the bag stays correct regardless of which language was
+  // active when the item was added — see the bag-rendering module below.
   document.querySelectorAll('.product-card__add').forEach((button) => {
     button.addEventListener('click', () => {
       const card = button.closest('.product-card');
       if (!card) return;
 
+      const categoryEl = card.querySelector('.product-card__category');
+
       addToBag({
         name: card.querySelector('.product-card__name').textContent.trim(),
-        category: card.querySelector('.product-card__category').textContent.trim(),
+        category: categoryEl.getAttribute('data-i18n') || categoryEl.textContent.trim().toLowerCase(),
         price: parsePrice(card.querySelector('.product-card__price').textContent),
       });
 
       // Brief, reversible confirmation so the click feels acknowledged
       // without needing a toast/notification system.
       const originalText = button.textContent;
-      button.textContent = 'Added ✓';
+      button.textContent = window.ShopistikI18n ? window.ShopistikI18n.t('addedConfirm') : 'Added ✓';
       button.disabled = true;
       setTimeout(() => {
         button.textContent = originalText;
@@ -269,13 +274,25 @@
   const { getBag, saveBag } = window.ShopistikBag;
 
   // Two simple line-art icons stand in for product photography, matching
-  // the style already used on the product cards, keyed by category.
+  // the style already used on the product cards, keyed by the category's
+  // translation key (lowercase, language-independent — see main.js's
+  // add-to-bag handler above and translations.js for the matching labels).
   const ICONS = {
-    Skincare:
+    skincare:
       '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h8v4l2 2v18H10V10l2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 14h8" stroke="currentColor" stroke-width="1.6" /></svg>',
-    Makeup:
+    makeup:
       '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M14 4h4l1 6-1 3v15h-4V13l-1-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>',
   };
+
+  // Category is stored as a translation key ("skincare"/"makeup"); resolve
+  // it to display text in whichever language is currently active.
+  function categoryLabel(categoryKey) {
+    return window.ShopistikI18n ? window.ShopistikI18n.t(categoryKey) : categoryKey;
+  }
+
+  function t(key, fallback) {
+    return window.ShopistikI18n ? window.ShopistikI18n.t(key) : fallback;
+  }
 
   function formatPrice(amount) {
     const fixed = amount.toFixed(2);
@@ -298,19 +315,19 @@
       .map(
         (item, index) => `
         <li class="bag__item" data-index="${index}">
-          <span class="bag__item-icon">${ICONS[item.category] || ICONS.Skincare}</span>
+          <span class="bag__item-icon">${ICONS[item.category] || ICONS.skincare}</span>
           <div class="bag__item-info">
-            <p class="bag__item-category">${item.category}</p>
+            <p class="bag__item-category">${categoryLabel(item.category)}</p>
             <h3 class="bag__item-name">${item.name}</h3>
-            <p class="bag__item-price">${formatPrice(item.price)} each</p>
+            <p class="bag__item-price">${formatPrice(item.price)} ${t('each', 'each')}</p>
           </div>
           <div class="bag__item-qty">
-            <button type="button" class="bag__qty-btn" data-action="decrease" aria-label="Decrease quantity">&minus;</button>
+            <button type="button" class="bag__qty-btn" data-action="decrease" aria-label="${t('decreaseQty', 'Decrease quantity')}">&minus;</button>
             <span class="bag__qty-value">${item.qty}</span>
-            <button type="button" class="bag__qty-btn" data-action="increase" aria-label="Increase quantity">+</button>
+            <button type="button" class="bag__qty-btn" data-action="increase" aria-label="${t('increaseQty', 'Increase quantity')}">+</button>
           </div>
           <p class="bag__item-total">${formatPrice(item.price * item.qty)}</p>
-          <button type="button" class="bag__remove" data-action="remove" aria-label="Remove ${item.name} from bag">
+          <button type="button" class="bag__remove" data-action="remove" aria-label="${t('removeFromBag', 'Remove {name} from bag').replace('{name}', item.name)}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
           </button>
         </li>`
@@ -345,6 +362,10 @@
     saveBag(bag);
     render();
   });
+
+  // Category labels are translated at render time (see categoryLabel above),
+  // so switching language needs to re-render the already-visible bag list.
+  document.addEventListener('shopistik:langchange', render);
 
   render();
 })();
