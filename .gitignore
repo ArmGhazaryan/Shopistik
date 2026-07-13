@@ -62,3 +62,6 @@ logs/
 ## Publish output
 publish/
 PublishProfiles/*.pubxml.user
+
+## Node (Playwright / local tooling)
+node_modules/

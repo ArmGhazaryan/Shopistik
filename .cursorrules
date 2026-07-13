@@ -1,4 +1,4 @@
-RULE: Multi-language support (i18n) is mandatory for all user-facing text, going forward, without exception.
+RULE 1: Multi-language support (i18n) is mandatory for all user-facing text, going forward, without exception.
 
 Whenever you add any new section, component, page, button, heading, description, or any other visible text to this site:
 
@@ -11,3 +11,17 @@ Whenever you add any new section, component, page, button, heading, description,
 4. Before considering any new feature "done," verify that switching the language selector to Russian and Armenian correctly updates all new text, with no leftover hardcoded English strings and no layout breaking (e.g. text overflow, wrapping issues like we saw with Armenian in the header).
 
 This applies automatically to all future prompts in this project, even if I don't explicitly mention translations in the prompt itself.
+
+---
+
+RULE 2: Full Responsiveness & Mobile-First Approach is mandatory for all UI layouts and components.
+
+Whenever you design, modify, or add any new layout, section, element, or component:
+
+1. Ensure it is fully responsive and looks perfect across all screen sizes: Mobile (portrait & landscape), Tablets, and Desktops.
+
+2. Use clean CSS Media Queries to handle layout shifts, font sizing, and padding adjustments for smaller screens. Do not let elements overlap or break out of their containers.
+
+3. Prioritize touch-friendly sizing for mobile devices (e.g., proper button heights, readable font sizes, and reasonable spacing/padding from screen edges).
+
+4. Test layouts under extreme cases: check how wide text (especially longer Armenian translations) wraps or shrinks on a narrow 320px-375px mobile screen.

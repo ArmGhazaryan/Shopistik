@@ -173,6 +173,81 @@
 })();
 
 /* --------------------------------------------------------------------------
+   Product card → detail page links
+   Catalog already hard-codes `product.html?id=…` on media/title. Category
+   pages (and any future grids, including on the homepage) only had plain
+   cards — this wires the same navigation everywhere by resolving each card
+   against window.ShopistikProducts (via data-product-id or product name).
+   Add-to-bag buttons stay outside the links so they keep working.
+   -------------------------------------------------------------------------- */
+(function () {
+  const products = window.ShopistikProducts;
+  const cards = document.querySelectorAll('.product-card');
+  if (!products || !products.length || !cards.length) return;
+
+  const byName = new Map(
+    products.map((product) => [String(product.name).trim().toLowerCase(), product])
+  );
+
+  function resolveId(card) {
+    const existing = card.getAttribute('data-product-id');
+    if (existing) return existing;
+
+    const nameEl = card.querySelector('.product-card__name');
+    if (!nameEl) return null;
+
+    const match = byName.get(nameEl.textContent.trim().toLowerCase());
+    return match ? match.id : null;
+  }
+
+  function ensureMediaLink(card, href) {
+    const existing = card.querySelector('.product-card__media-link');
+    if (existing) {
+      existing.setAttribute('href', href);
+      return;
+    }
+
+    const media = card.querySelector('.product-card__media');
+    if (!media || !media.parentNode) return;
+
+    const link = document.createElement('a');
+    link.className = 'product-card__media-link';
+    link.href = href;
+    media.parentNode.insertBefore(link, media);
+    link.appendChild(media);
+  }
+
+  function ensureNameLink(card, href) {
+    const heading = card.querySelector('.product-card__name');
+    if (!heading) return;
+
+    const existing = heading.querySelector('.product-card__name-link');
+    if (existing) {
+      existing.setAttribute('href', href);
+      return;
+    }
+
+    const label = heading.textContent.trim();
+    heading.textContent = '';
+    const link = document.createElement('a');
+    link.className = 'product-card__name-link';
+    link.href = href;
+    link.textContent = label;
+    heading.appendChild(link);
+  }
+
+  cards.forEach((card) => {
+    const id = resolveId(card);
+    if (!id) return;
+
+    card.setAttribute('data-product-id', id);
+    const href = `product.html?id=${encodeURIComponent(id)}`;
+    ensureMediaLink(card, href);
+    ensureNameLink(card, href);
+  });
+})();
+
+/* --------------------------------------------------------------------------
    Shopping bag (cart)
    There's no backend yet, so the bag is just an array of { name, category,
    price, qty } saved to localStorage under one key. That's enough for it to
@@ -210,15 +285,35 @@
     return parseFloat(String(text).replace(/[^0-9.]/g, '')) || 0;
   }
 
-  function addToBag(product) {
+  function addToBag(product, quantity) {
+    const qtyToAdd = Math.max(1, Number(quantity) || 1);
     const bag = getBag();
     const existing = bag.find((item) => item.name === product.name);
     if (existing) {
-      existing.qty += 1;
+      existing.qty += qtyToAdd;
     } else {
-      bag.push(Object.assign({ qty: 1 }, product));
+      bag.push(Object.assign({}, product, { qty: qtyToAdd }));
     }
     saveBag(bag);
+  }
+
+  // Brief bounce on the floating bag FAB so the add feels acknowledged
+  // beyond the button label change alone.
+  function pulseBagFab() {
+    const fab = document.querySelector('.site-fab-bag');
+    if (!fab) return;
+    fab.classList.remove('is-popping');
+    // Force a reflow so re-adding the class retriggers the animation even
+    // when the user clicks "Add to Bag" twice in quick succession.
+    void fab.offsetWidth;
+    fab.classList.add('is-popping');
+    fab.addEventListener(
+      'animationend',
+      () => {
+        fab.classList.remove('is-popping');
+      },
+      { once: true }
+    );
   }
 
   // Every product card on the catalog/category pages has an "Add to Bag"
@@ -229,6 +324,8 @@
   // active when the item was added — see the bag-rendering module below.
   document.querySelectorAll('.product-card__add').forEach((button) => {
     button.addEventListener('click', () => {
+      if (button.disabled || button.classList.contains('is-added')) return;
+
       const card = button.closest('.product-card');
       if (!card) return;
 
@@ -240,23 +337,27 @@
         price: parsePrice(card.querySelector('.product-card__price').textContent),
       });
 
-      // Brief, reversible confirmation so the click feels acknowledged
-      // without needing a toast/notification system.
+      pulseBagFab();
+
+      // Elegant confirmation: scale/fade via `.is-added`, then restore the
+      // original i18n label so language switches stay correct afterwards.
       const originalText = button.textContent;
+      button.classList.add('is-added');
       button.textContent = window.ShopistikI18n ? window.ShopistikI18n.t('addedConfirm') : 'Added ✓';
       button.disabled = true;
       setTimeout(() => {
+        button.classList.remove('is-added');
         button.textContent = originalText;
         button.disabled = false;
-      }, 1000);
+      }, 1100);
     });
   });
 
   updateBagCount(getBag());
 
   // Shared with the bag-page rendering script below (and available to any
-  // future page that needs to read/write the same cart).
-  window.ShopistikBag = { getBag, saveBag };
+  // future page that needs to read/write the same cart — e.g. product.js).
+  window.ShopistikBag = { getBag, saveBag, updateBagCount, addToBag, pulseBagFab };
 })();
 
 /* --------------------------------------------------------------------------
@@ -299,12 +400,35 @@
     return `$${fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed}`;
   }
 
+  function showEmptyState() {
+    bagList.innerHTML = '';
+    bagEmpty.hidden = false;
+    bagBody.hidden = true;
+
+    const bagSubtotal = document.getElementById('bagSubtotal');
+    const bagTotal = document.getElementById('bagTotal');
+    if (bagSubtotal) bagSubtotal.textContent = formatPrice(0);
+    if (bagTotal) bagTotal.textContent = formatPrice(0);
+  }
+
   function render() {
-    const bag = getBag();
+    // Always re-read from storage so a single remaining item (or a fully
+    // emptied bag) never operates on a stale in-memory snapshot.
+    const raw = getBag();
+    const bag = raw.filter((item) => item && Number(item.qty) > 0);
+
+    // Keep storage in sync with what we render so data-index always maps
+    // 1:1 to the live array (avoids a frozen last row after a bad qty).
+    if (bag.length !== raw.length) {
+      saveBag(bag);
+    }
 
     if (!bag.length) {
-      bagEmpty.hidden = false;
-      bagBody.hidden = true;
+      if (raw.length) saveBag([]);
+      else if (window.ShopistikBag.updateBagCount) {
+        window.ShopistikBag.updateBagCount([]);
+      }
+      showEmptyState();
       return;
     }
 
@@ -335,28 +459,45 @@
       .join('');
 
     const subtotal = bag.reduce((sum, item) => sum + item.price * item.qty, 0);
-    document.getElementById('bagSubtotal').textContent = formatPrice(subtotal);
-    document.getElementById('bagTotal').textContent = formatPrice(subtotal);
+    const bagSubtotal = document.getElementById('bagSubtotal');
+    const bagTotal = document.getElementById('bagTotal');
+    if (bagSubtotal) bagSubtotal.textContent = formatPrice(subtotal);
+    if (bagTotal) bagTotal.textContent = formatPrice(subtotal);
   }
 
-  // One delegated listener handles every row's stepper/remove buttons,
-  // since rows are re-created on every render() call.
-  bagList.addEventListener('click', (event) => {
+  // One delegated listener on the wrap (not only the list) so controls stay
+  // live even when the last row is removed and the list is briefly empty.
+  // The floating FAB used to sit on top of the final row's +/- / remove
+  // buttons on short carts — that overlap is cleared in CSS; this handler
+  // stays defensive either way.
+  const bagWrap = bagBody.closest('.bag__wrap') || bagBody;
+  bagWrap.addEventListener('click', (event) => {
     const button = event.target.closest('button[data-action]');
-    if (!button) return;
+    if (!button || !bagList.contains(button)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
 
     const row = button.closest('.bag__item');
-    const index = Number(row.dataset.index);
-    const bag = getBag();
-    if (!bag[index]) return;
+    if (!row) return;
 
-    if (button.dataset.action === 'increase') {
-      bag[index].qty += 1;
-    } else if (button.dataset.action === 'decrease') {
-      bag[index].qty -= 1;
+    const index = Number(row.getAttribute('data-index'));
+    if (!Number.isInteger(index) || index < 0) return;
+
+    const bag = getBag();
+    if (index >= bag.length || !bag[index]) return;
+
+    const action = button.getAttribute('data-action');
+
+    if (action === 'increase') {
+      bag[index].qty = Number(bag[index].qty) + 1;
+    } else if (action === 'decrease') {
+      bag[index].qty = Number(bag[index].qty) - 1;
       if (bag[index].qty <= 0) bag.splice(index, 1);
-    } else if (button.dataset.action === 'remove') {
+    } else if (action === 'remove') {
       bag.splice(index, 1);
+    } else {
+      return;
     }
 
     saveBag(bag);

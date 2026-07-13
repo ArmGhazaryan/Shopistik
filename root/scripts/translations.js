@@ -12,6 +12,7 @@ const translations = {
     aboutUs: 'About',
     bag: 'Bag',
     contactUs: 'Contact Us',
+    navContact: 'Contact',
     shopNow: 'Shop Now',
     menu: 'Menu',
 
@@ -149,6 +150,17 @@ const translations = {
     deliveryItem1Text: 'Every order within our home city ships free, with no minimum spend.',
     deliveryItem2Text: 'Nationwide orders arrive within one to two business days, fully tracked.',
 
+    // contact.html
+    contactEyebrow: 'Reach Out',
+    contactTitle: 'Get in Touch',
+    contactIntro: 'Whether you have a question about your order, need a product recommendation, or simply want to say hello — we would love to hear from you.',
+    contactChannelEmail: 'Email',
+    contactChannelEmailDesc: 'Write to us anytime — we typically respond within one business day.',
+    contactChannelInstagram: 'Instagram',
+    contactChannelInstagramDesc: 'Follow us for new arrivals, tips, and beauty inspiration.',
+    contactOpenEmail: 'Send an email to Shopistik',
+    contactOpenInstagram: 'Visit Shopistik on Instagram',
+
     // Product card short descriptions (unique per product, reused wherever
     // that product appears across catalog/category pages)
     prodRoseGoldSerum: 'Radiance-boosting daily oil',
@@ -163,6 +175,60 @@ const translations = {
     prodFeatherMascara: 'Lengthens without clumping',
     prodRosePetalBlush: 'Buildable flush of colour',
     prodSheerVeilPowder: 'Blurs pores, controls shine',
+    // product.html — chrome + detail copy
+    pdpDescription: 'Description',
+    pdpHowToUse: 'How to Use',
+    pdpIngredients: 'Ingredients',
+    pdpQuantity: 'Quantity',
+    pdpNotFound: "We couldn't find that product.",
+
+    pdpDescRoseGoldSerum: 'A lightweight daily face oil that layers rosehip and golden botanicals to restore radiance without heaviness. Skin looks smoother, softer and quietly luminous by evening.',
+    pdpUseRoseGoldSerum: 'After cleansing and toning, warm 2–3 drops between your palms and press gently over face and neck. Use morning and night, alone or under moisturizer.',
+    pdpIngRoseGoldSerum: 'Rosa Canina Seed Oil, Squalane, Tocopherol, Helianthus Annuus Seed Oil, Caprylic/Capric Triglyceride, Fragrance (Parfum).',
+
+    pdpDescHydraBloom: 'A weightless gel-cream that delivers 24-hour hydration with a soft, breathable finish. Ideal for combination and normal skin that wants moisture without shine.',
+    pdpUseHydraBloom: 'Apply a pearl-sized amount to clean skin morning and night. Pat until absorbed; follow with SPF in the daytime.',
+    pdpIngHydraBloom: 'Aqua, Glycerin, Sodium Hyaluronate, Panthenol, Aloe Barbadensis Leaf Juice, Carbomer, Phenoxyethanol.',
+
+    pdpDescDewDrop: 'A silky cleansing oil that melts makeup, SPF and daily impurities while leaving skin comfortable — never stripped. Rinses clean with a soft, hydrated afterfeel.',
+    pdpUseDewDrop: 'Massage onto dry skin, then add a little water to emulsify into a milky rinse. Follow with your usual cleanser if you prefer a double-cleanse.',
+    pdpIngDewDrop: 'Helianthus Annuus Seed Oil, Caprylic/Capric Triglyceride, Polyglyceryl-4 Oleate, Tocopherol, Limnanthes Alba Seed Oil.',
+
+    pdpDescVelvetNight: 'A rich overnight cream that supports renewal while you sleep. Skin wakes plumper, calmer and deeply comforted — especially in dry or cooler seasons.',
+    pdpUseVelvetNight: 'As the last step of your evening ritual, smooth a thin layer over face and neck. Allow a few minutes to settle before pillows.',
+    pdpIngVelvetNight: 'Aqua, Caprylic/Capric Triglyceride, Shea Butter, Ceramide NP, Niacinamide, Glycerin, Dimethicone, Phenoxyethanol.',
+
+    pdpDescBrightEyes: 'A cooling eye cream that softens the look of puffiness and dullness around the orbital area. Lightweight enough for morning, comforting enough for night.',
+    pdpUseBrightEyes: 'Dot a rice-grain amount along the orbital bone morning and night. Pat gently with the ring finger — never rub.',
+    pdpIngBrightEyes: 'Aqua, Caffeine, Glycerin, Sodium Hyaluronate, Niacinamide, Cucumis Sativus Fruit Extract, Phenoxyethanol.',
+
+    pdpDescPetalLip: 'A cushiony balm enriched with shea and rosehip to soften and nourish dry lips. Leaves a subtle sheen — never sticky.',
+    pdpUsePetalLip: 'Apply throughout the day as needed, and as a final step before bed for overnight comfort.',
+    pdpIngPetalLip: 'Butyrospermum Parkii Butter, Ricinus Communis Seed Oil, Beeswax, Rosa Canina Seed Oil, Tocopherol, Flavor.',
+
+    pdpDescVelvetLipstick: 'A soft-matte lipstick in Blush Nude that glides on smoothly and wears comfortably. Buildable colour with a refined, non-drying finish.',
+    pdpUseVelvetLipstick: 'Apply directly from the bullet or with a lip brush for precision. Blot and layer for deeper colour.',
+    pdpIngVelvetLipstick: 'Ricinus Communis Seed Oil, Caprylic/Capric Triglyceride, Candelilla Cera, Mica, Iron Oxides, Tocopherol.',
+
+    pdpDescSilkFoundation: 'A cushion foundation with a buildable, natural finish that evens tone without masking skin. Breathable coverage that looks like skin, only smoother.',
+    pdpUseSilkFoundation: 'Press the puff into the cushion, then tap onto the centre of the face and blend outward. Build where you need more coverage.',
+    pdpIngSilkFoundation: 'Aqua, Cyclopentasiloxane, Titanium Dioxide, Glycerin, Dimethicone, Iron Oxides, Phenoxyethanol.',
+
+    pdpDescGoldenHighlighter: 'A finely milled highlighter that catches light with a warm, lit-from-within glow. Soft enough for everyday, luminous enough for evening.',
+    pdpUseGoldenHighlighter: 'Sweep onto the high points of the face — cheekbones, brow bone, cupid\'s bow — with a fluffy brush or fingertip.',
+    pdpIngGoldenHighlighter: 'Mica, Caprylic/Capric Triglyceride, Silica, Magnesium Stearate, Iron Oxides, Tin Oxide.',
+
+    pdpDescFeatherMascara: 'A lengthening mascara that defines lashes without clumping or heaviness. The featherlight formula builds cleanly from day to night.',
+    pdpUseFeatherMascara: 'Starting at the base of the lashes, wiggle the wand upward in a zigzag motion. Layer once dry for extra length.',
+    pdpIngFeatherMascara: 'Aqua, Beeswax, Copernicia Cerifera Cera, Iron Oxides, Acacia Senegal Gum, Phenoxyethanol.',
+
+    pdpDescRosePetalBlush: 'A dual-pan blush with soft, buildable colour for a natural flush. Blend the shades alone or together for a custom petal-pink finish.',
+    pdpUseRosePetalBlush: 'Sweep a light layer onto the apples of the cheeks and blend toward the temples. Layer for a deeper flush.',
+    pdpIngRosePetalBlush: 'Mica, Caprylic/Capric Triglyceride, Silica, Iron Oxides, Titanium Dioxide, Magnesium Stearate.',
+
+    pdpDescSheerVeilPowder: 'A translucent setting powder that blurs the look of pores and softens shine without a chalky cast. Finishes makeup with a soft-focus veil.',
+    pdpUseSheerVeilPowder: 'Dust lightly over the T-zone and anywhere you want longer wear, using a fluffy brush or puff.',
+    pdpIngSheerVeilPowder: 'Silica, Mica, Caprylic/Capric Triglyceride, Dimethicone, Magnesium Stearate, Tocopherol.',
   },
 
   hy: {
@@ -171,6 +237,7 @@ const translations = {
     aboutUs: 'Մեր մասին',
     bag: 'Զամբյուղ',
     contactUs: 'Կապ մեզ հետ',
+    navContact: 'Կապ',
     shopNow: 'Գնել հիմա',
     menu: 'Ընտրացանկ',
 
@@ -291,6 +358,16 @@ const translations = {
     deliveryItem1Text: 'Մեր հիմնական քաղաքում ցանկացած պատվեր առաքվում է անվճար՝ առանց նվազագույն գումարի պահանջի։',
     deliveryItem2Text: 'Ողջ երկրով մեկ պատվերները հասնում են մեկից երկու աշխատանքային օրում՝ ամբողջությամբ հետագծելի։',
 
+    contactEyebrow: 'Կապ',
+    contactTitle: 'Կապվեք մեզ հետ',
+    contactIntro: 'Եթե ունեք հարց պատվերի մասին, կարիք ունեք արտադրանքի խորհրդի կամ պարզապես ցանկանում եք ողջույն հայտնել — մենք սիրով կլսենք ձեզ։',
+    contactChannelEmail: 'Էլ. փոստ',
+    contactChannelEmailDesc: 'Գրեք մեզ ցանկացած ժամանակ — սովորաբար պատասխանում ենք մեկ աշխատանքային օրվա ընթացքում։',
+    contactChannelInstagram: 'Instagram',
+    contactChannelInstagramDesc: 'Հետևեք մեզ նորույթների, խորհուրդների և գեղեցկության ոգեշնչման համար։',
+    contactOpenEmail: 'Ուղարկել էլ. նամակ Shopistik-ին',
+    contactOpenInstagram: 'Այցելել Shopistik-ը Instagram-ում',
+
     prodRoseGoldSerum: 'Փայլ հաղորդող ամենօրյա յուղ',
     prodHydraBloom: '24-ժամյա անկշիռ խոնավացում',
     prodDewDrop: 'Հալեցնում է դիմահարդարումն ու կեղտը',
@@ -303,6 +380,60 @@ const translations = {
     prodFeatherMascara: 'Երկարացնում է առանց կոշտացման',
     prodRosePetalBlush: 'Հարմարվող վարդագույն երանգ',
     prodSheerVeilPowder: 'Աննկատ դարձնում է ծակոտիները, վերահսկում փայլը',
+    // product.html — chrome + detail copy
+    pdpDescription: 'Նկարագրություն',
+    pdpHowToUse: 'Ինչպես օգտագործել',
+    pdpIngredients: 'Բաղադրիչներ',
+    pdpQuantity: 'Քանակ',
+    pdpNotFound: 'Այդ ապրանքը չգտնվեց։',
+
+    pdpDescRoseGoldSerum: 'Թեթև ամենօրյա յուղ դեմքի համար՝ մասուրի և ոսկեգույն բուսական բաղադրիչներով, որը վերականգնում է փայլը առանց ծանրության։ Երեկոյան մաշկը ավելի հարթ, փափուկ և նուրբ լուսավոր է թվում։',
+    pdpUseRoseGoldSerum: 'Մաքրումից և տոնիկից հետո տաքացրեք 2–3 կաթիլ ափերի մեջ և նուրբ սեղմեք դեմքին ու պարանոցին։ Օգտագործեք առավոտ և երեկո՝ առանձին կամ խոնավացնողի տակ։',
+    pdpIngRoseGoldSerum: 'Rosa Canina Seed Oil, Squalane, Tocopherol, Helianthus Annuus Seed Oil, Caprylic/Capric Triglyceride, Fragrance (Parfum).',
+
+    pdpDescHydraBloom: 'Անկշիռ գել-կրեմ, որը տալիս է 24-ժամյա խոնավություն՝ փափուկ, շնչող ավարտով։ Իդեալական է խառը և նորմալ մաշկի համար, որը ցանկանում է խոնավություն առանց փայլի։',
+    pdpUseHydraBloom: 'Քսեք մարգարիտի չափ քանակ մաքուր մաշկին առավոտ և երեկո։ Թեթևակի թակեք մինչև ներծծվելը. ցերեկը հետևեք SPF-ով։',
+    pdpIngHydraBloom: 'Aqua, Glycerin, Sodium Hyaluronate, Panthenol, Aloe Barbadensis Leaf Juice, Carbomer, Phenoxyethanol.',
+
+    pdpDescDewDrop: 'Մետաքսյա մաքրող յուղ, որը հալեցնում է դիմահարդարումը, SPF-ը և ամենօրյա կեղտը՝ մաշկը թողնելով հարմարավետ, ոչ չորացած։ Լվացվում է մաքուր՝ փափուկ, խոնավացած զգացողությամբ։',
+    pdpUseDewDrop: 'Մերսեք չոր մաշկի վրա, ապա ավելացրեք մի քիչ ջուր՝ կաթնային էմուլսիա ստանալու համար։ Ցանկության դեպքում շարունակեք սովորական մաքրող միջոցով։',
+    pdpIngDewDrop: 'Helianthus Annuus Seed Oil, Caprylic/Capric Triglyceride, Polyglyceryl-4 Oleate, Tocopherol, Limnanthes Alba Seed Oil.',
+
+    pdpDescVelvetNight: 'Հարուստ գիշերային կրեմ, որն աջակցում է վերականգնմանը քնի ընթացքում։ Մաշկը արթնանում է ավելի լիքը, հանգիստ և խորապես հարմարավետ՝ հատկապես չոր կամ զով սեզոններին։',
+    pdpUseVelvetNight: 'Որպես երեկոյան ծեսի վերջին քայլ՝ բարակ շերտով քսեք դեմքին ու պարանոցին։ Թողեք մի քանի րոպե նստի մինչև բարձին հենվելը։',
+    pdpIngVelvetNight: 'Aqua, Caprylic/Capric Triglyceride, Shea Butter, Ceramide NP, Niacinamide, Glycerin, Dimethicone, Phenoxyethanol.',
+
+    pdpDescBrightEyes: 'Հովացնող աչքերի կրեմ, որը մեղմացնում է այտուցի և խամրածության տեսքը աչքերի շուրջ։ Բավական թեթև է առավոտվա համար և հարմարավետ՝ գիշերվա։',
+    pdpUseBrightEyes: 'Կաթեք բրնձի հատիկի չափ քանակ աչքի ոսկրի երկայնքով առավոտ և երեկո։ Նուրբ թակեք մատնեմատով՝ երբեք մի շփեք։',
+    pdpIngBrightEyes: 'Aqua, Caffeine, Glycerin, Sodium Hyaluronate, Niacinamide, Cucumis Sativus Fruit Extract, Phenoxyethanol.',
+
+    pdpDescPetalLip: 'Փափուկ բալզամ՝ կարիտեով և մասուրով, որը փափկացնում և սնուցում է չոր շուրթերը։ Թողնում է նուրբ փայլ՝ առանց կպչունության։',
+    pdpUsePetalLip: 'Քսեք օրվա ընթացքում ըստ անհրաժեշտության և որպես վերջին քայլ քնելուց առաջ՝ գիշերային հարմարավետության համար։',
+    pdpIngPetalLip: 'Butyrospermum Parkii Butter, Ricinus Communis Seed Oil, Beeswax, Rosa Canina Seed Oil, Tocopherol, Flavor.',
+
+    pdpDescVelvetLipstick: 'Փափուկ մատե շրթներկ Blush Nude երանգով, որը սահում է հարթ և հարմարավետ է կրել։ Կառուցվող գույն՝ նուրբ, չչորացնող ավարտով։',
+    pdpUseVelvetLipstick: 'Քսեք ուղղակիորեն կամ շրթունքների վրձնով՝ ճշգրտության համար։ Թեթևակի սեղմեք և շերտավորեք ավելի խոր գույնի համար։',
+    pdpIngVelvetLipstick: 'Ricinus Communis Seed Oil, Caprylic/Capric Triglyceride, Candelilla Cera, Mica, Iron Oxides, Tocopherol.',
+
+    pdpDescSilkFoundation: 'Բարձիկային հիմք՝ կառուցվող, բնական ավարտով, որը հավասարեցնում է երանգը առանց մաշկը ծածկելու։ Շնչող ծածկույթ, որ նման է մաշկի՝ միայն ավելի հարթ։',
+    pdpUseSilkFoundation: 'Սեղմեք սպունգը բարձիկի մեջ, ապա թակեք դեմքի կենտրոնից և խառնեք դեպի դուրս։ Ավելացրեք այնտեղ, որտեղ ավելի շատ ծածկույթ է պետք։',
+    pdpIngSilkFoundation: 'Aqua, Cyclopentasiloxane, Titanium Dioxide, Glycerin, Dimethicone, Iron Oxides, Phenoxyethanol.',
+
+    pdpDescGoldenHighlighter: 'Նուրբ մանրացված հայլայթեր, որը բռնում է լույսը՝ ջերմ, ներսից փայլող երանգով։ Բավական փափուկ է ամեն օրվա համար և լուսավոր՝ երեկոյան։',
+    pdpUseGoldenHighlighter: 'Քսեք դեմքի բարձր կետերին՝ այտոսկրեր, հոնքերի ոսկոր, շրթունքների վերին աղեղ՝ փափուկ վրձնով կամ մատով։',
+    pdpIngGoldenHighlighter: 'Mica, Caprylic/Capric Triglyceride, Silica, Magnesium Stearate, Iron Oxides, Tin Oxide.',
+
+    pdpDescFeatherMascara: 'Երկարացնող թարթիչների ներկ, որը սահմանում է թարթիչները առանց կոշտացման կամ ծանրության։ Թեթև բանաձևը մաքուր է կառուցվում առավոտից մինչև երեկո։',
+    pdpUseFeatherMascara: 'Սկսելով թարթիչների հիմքից՝ վիգլեք վրձինը վերև՝ զիգզագ շարժումով։ Չորանալուց հետո շերտավորեք լրացուցիչ երկարության համար։',
+    pdpIngFeatherMascara: 'Aqua, Beeswax, Copernicia Cerifera Cera, Iron Oxides, Acacia Senegal Gum, Phenoxyethanol.',
+
+    pdpDescRosePetalBlush: 'Երկակի պալիտրայով դիմափոշի՝ փափուկ, կառուցվող գույնով՝ բնական կարմրության համար։ Խառնեք երանգները առանձին կամ միասին՝ անհատական վարդագույն ավարտի համար։',
+    pdpUseRosePetalBlush: 'Թեթև շերտով քսեք այտերի խնձորներին և խառնեք դեպի քունքերը։ Շերտավորեք ավելի խոր կարմրության համար։',
+    pdpIngRosePetalBlush: 'Mica, Caprylic/Capric Triglyceride, Silica, Iron Oxides, Titanium Dioxide, Magnesium Stearate.',
+
+    pdpDescSheerVeilPowder: 'Թափանցիկ ֆիքսող փոշի, որը մեղմացնում է ծակոտիների տեսքը և փայլը՝ առանց սպիտակավուն շերտի։ Ավարտում է դիմահարդարումը փափուկ ֆոկուսի շղարշով։',
+    pdpUseSheerVeilPowder: 'Թեթևակի ցանեք T-գոտու վրա և այնտեղ, որտեղ ավելի երկար կրում եք ուզում՝ փափուկ վրձնով կամ սպունգով։',
+    pdpIngSheerVeilPowder: 'Silica, Mica, Caprylic/Capric Triglyceride, Dimethicone, Magnesium Stearate, Tocopherol.',
   },
 
   ru: {
@@ -311,6 +442,7 @@ const translations = {
     aboutUs: 'О нас',
     bag: 'Корзина',
     contactUs: 'Связаться с нами',
+    navContact: 'Контакты',
     shopNow: 'Купить сейчас',
     menu: 'Меню',
 
@@ -431,6 +563,16 @@ const translations = {
     deliveryItem1Text: 'Любой заказ по нашему родному городу доставляется бесплатно, без минимальной суммы.',
     deliveryItem2Text: 'Заказы по всей стране приходят за один-два рабочих дня с полным отслеживанием.',
 
+    contactEyebrow: 'Связаться',
+    contactTitle: 'Свяжитесь с нами',
+    contactIntro: 'Если у вас есть вопрос о заказе, нужна рекомендация по продукту или вы просто хотите поздороваться — мы будем рады услышать вас.',
+    contactChannelEmail: 'Электронная почта',
+    contactChannelEmailDesc: 'Пишите нам в любое время — обычно отвечаем в течение одного рабочего дня.',
+    contactChannelInstagram: 'Instagram',
+    contactChannelInstagramDesc: 'Подписывайтесь на новинки, советы и вдохновение.',
+    contactOpenEmail: 'Написать Shopistik по электронной почте',
+    contactOpenInstagram: 'Перейти в Instagram Shopistik',
+
     prodRoseGoldSerum: 'Ежедневное масло для сияния кожи',
     prodHydraBloom: '24-часовое лёгкое увлажнение',
     prodDewDrop: 'Растворяет макияж и загрязнения',
@@ -443,6 +585,60 @@ const translations = {
     prodFeatherMascara: 'Удлиняет без склеивания',
     prodRosePetalBlush: 'Регулируемый румяный оттенок',
     prodSheerVeilPowder: 'Скрывает поры, контролирует блеск',
+    // product.html — chrome + detail copy
+    pdpDescription: 'Описание',
+    pdpHowToUse: 'Способ применения',
+    pdpIngredients: 'Состав',
+    pdpQuantity: 'Количество',
+    pdpNotFound: 'Мы не смогли найти этот товар.',
+
+    pdpDescRoseGoldSerum: 'Лёгкое ежедневное масло для лица с шиповником и золотистыми ботаническими экстрактами — возвращает сияние без тяжести. К вечеру кожа выглядит более гладкой, мягкой и мягко светящейся.',
+    pdpUseRoseGoldSerum: 'После очищения и тоника согрейте 2–3 капли в ладонях и мягко впечатайте в лицо и шею. Используйте утром и вечером — отдельно или под увлажняющий крем.',
+    pdpIngRoseGoldSerum: 'Rosa Canina Seed Oil, Squalane, Tocopherol, Helianthus Annuus Seed Oil, Caprylic/Capric Triglyceride, Fragrance (Parfum).',
+
+    pdpDescHydraBloom: 'Невесомый крем-гель с 24-часовым увлажнением и мягким, «дышащим» финишем. Идеален для комбинированной и нормальной кожи, которой нужна влага без блеска.',
+    pdpUseHydraBloom: 'Нанесите объём с горошину на чистую кожу утром и вечером. Легко вобейте до впитывания; днём завершите SPF.',
+    pdpIngHydraBloom: 'Aqua, Glycerin, Sodium Hyaluronate, Panthenol, Aloe Barbadensis Leaf Juice, Carbomer, Phenoxyethanol.',
+
+    pdpDescDewDrop: 'Шёлковое гидрофильное масло, которое растворяет макияж, SPF и повседневные загрязнения, оставляя кожу комфортной — без ощущения стянутости. Смывается чисто, с мягким увлажнённым послевкусием.',
+    pdpUseDewDrop: 'Массируйте по сухой коже, затем добавьте немного воды, чтобы эмульгировать в молочко. При желании продолжите обычным очищающим средством.',
+    pdpIngDewDrop: 'Helianthus Annuus Seed Oil, Caprylic/Capric Triglyceride, Polyglyceryl-4 Oleate, Tocopherol, Limnanthes Alba Seed Oil.',
+
+    pdpDescVelvetNight: 'Насыщенный ночной крем, который поддерживает обновление во время сна. Кожа просыпается более наполненной, спокойной и глубоко увлажнённой — особенно в сухой или прохладный сезон.',
+    pdpUseVelvetNight: 'Последним шагом вечернего ухода тонким слоем нанесите на лицо и шею. Дайте несколько минут впитаться перед сном.',
+    pdpIngVelvetNight: 'Aqua, Caprylic/Capric Triglyceride, Shea Butter, Ceramide NP, Niacinamide, Glycerin, Dimethicone, Phenoxyethanol.',
+
+    pdpDescBrightEyes: 'Охлаждающий крем для глаз, который смягчает вид отёчности и тусклости вокруг орбитальной зоны. Достаточно лёгкий для утра и комфортный для ночи.',
+    pdpUseBrightEyes: 'Нанесите объём с рисовое зёрнышко вдоль орбитальной кости утром и вечером. Мягко вобейте безымянным пальцем — не растирайте.',
+    pdpIngBrightEyes: 'Aqua, Caffeine, Glycerin, Sodium Hyaluronate, Niacinamide, Cucumis Sativus Fruit Extract, Phenoxyethanol.',
+
+    pdpDescPetalLip: 'Мягкий бальзам с маслом ши и шиповником, который смягчает и питает сухие губы. Оставляет лёгкий блеск — без липкости.',
+    pdpUsePetalLip: 'Наносите в течение дня по необходимости и как финальный шаг перед сном для ночного комфорта.',
+    pdpIngPetalLip: 'Butyrospermum Parkii Butter, Ricinus Communis Seed Oil, Beeswax, Rosa Canina Seed Oil, Tocopherol, Flavor.',
+
+    pdpDescVelvetLipstick: 'Мягкая матовая помада в оттенке Blush Nude — гладко наносится и комфортно носится. Наращиваемый цвет с изысканным, не сушащим финишем.',
+    pdpUseVelvetLipstick: 'Нанесите прямо из стика или кистью для губ для точности. Промокните и наслоите для более насыщенного цвета.',
+    pdpIngVelvetLipstick: 'Ricinus Communis Seed Oil, Caprylic/Capric Triglyceride, Candelilla Cera, Mica, Iron Oxides, Tocopherol.',
+
+    pdpDescSilkFoundation: 'Кушон-тональная основа с наращиваемым натуральным покрытием, которое выравнивает тон, не маскируя кожу. Дышащее покрытие, которое выглядит как кожа — только глаже.',
+    pdpUseSilkFoundation: 'Прижмите спонж к кушону, затем нанесите от центра лица наружу лёгкими касаниями. Добавьте там, где нужно больше покрытия.',
+    pdpIngSilkFoundation: 'Aqua, Cyclopentasiloxane, Titanium Dioxide, Glycerin, Dimethicone, Iron Oxides, Phenoxyethanol.',
+
+    pdpDescGoldenHighlighter: 'Мелкодисперсный хайлайтер с тёплым сиянием «изнутри». Достаточно мягкий для каждого дня и достаточно светящийся для вечера.',
+    pdpUseGoldenHighlighter: 'Нанесите на выступающие зоны лица — скулы, надбровную дугу, лук Купидона — пушистой кистью или подушечкой пальца.',
+    pdpIngGoldenHighlighter: 'Mica, Caprylic/Capric Triglyceride, Silica, Magnesium Stearate, Iron Oxides, Tin Oxide.',
+
+    pdpDescFeatherMascara: 'Удлиняющая тушь, которая подчёркивает ресницы без комков и тяжести. Лёгкая формула чисто наращивается от дня к вечеру.',
+    pdpUseFeatherMascara: 'Начиная от основания ресниц, ведите щёточку вверх зигзагообразным движением. После высыхания наслоите для дополнительной длины.',
+    pdpIngFeatherMascara: 'Aqua, Beeswax, Copernicia Cerifera Cera, Iron Oxides, Acacia Senegal Gum, Phenoxyethanol.',
+
+    pdpDescRosePetalBlush: 'Двойные румяна с мягким, наращиваемым цветом для естественного румянца. Смешивайте оттенки по отдельности или вместе для своего лепестково-розового финиша.',
+    pdpUseRosePetalBlush: 'Лёгким слоем нанесите на яблочки щёк и растушуйте к вискам. Наслоите для более насыщенного румянца.',
+    pdpIngRosePetalBlush: 'Mica, Caprylic/Capric Triglyceride, Silica, Iron Oxides, Titanium Dioxide, Magnesium Stearate.',
+
+    pdpDescSheerVeilPowder: 'Прозрачная фиксирующая пудра, которая смягчает вид пор и блеска без мелового налёта. Завершает макияж мягким soft-focus покрывалом.',
+    pdpUseSheerVeilPowder: 'Лёгким слоем нанесите на T-зону и туда, где хотите более стойкое покрытие, пушистой кистью или спонжем.',
+    pdpIngSheerVeilPowder: 'Silica, Mica, Caprylic/Capric Triglyceride, Dimethicone, Magnesium Stearate, Tocopherol.',
   },
 };
 
