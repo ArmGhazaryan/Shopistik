@@ -333,10 +333,60 @@ h3 {
   color: var(--color-rose-700);
 }
 
+/* Floating bag FAB: the same bag control reused outside the header and pinned
+   to the viewport so it stays reachable while scrolling any page. */
+.site-fab-bag {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  z-index: 90;
+  isolation: isolate;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--color-rose-700);
+  color: #fff;
+  box-shadow: 0 12px 30px -16px rgba(32, 29, 26, 0.38), 0 4px 12px -8px rgba(92, 47, 44, 0.32);
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  animation: fabEntrance 0.42s ease-out 0.12s both;
+}
+
+/* Subtle "glass" polish: a very light inner sheen confined to the top arc,
+   intentionally low-contrast so it reads as premium depth, not a glossy blob. */
+.site-fab-bag::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 28%, rgba(255, 255, 255, 0) 58%);
+  mix-blend-mode: screen;
+}
+
+.site-fab-bag:hover,
+.site-fab-bag:focus-visible {
+  background: var(--color-rose-900);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 18px 34px -16px rgba(32, 29, 26, 0.42), 0 6px 16px -8px rgba(92, 47, 44, 0.36);
+}
+
+/* Soft bounce when an item is added from a product card. */
+.site-fab-bag.is-popping {
+  animation: cartPop 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* On the bag page the FAB sits over the last row's +/- / remove controls
+   (especially with a single short cart). Hide it there — the visitor is
+   already in the bag — so those controls stay fully tappable. */
+body:has(.bag) .site-fab-bag {
+  display: none;
+}
+
 .site-header__bag-count {
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: -4px;
+  right: -4px;
   display: grid;
   place-items: center;
   min-width: 1.15rem;
@@ -344,6 +394,7 @@ h3 {
   padding: 0 0.3em;
   border-radius: 999px;
   background: var(--color-rose-700);
+  border: 2px solid var(--color-bg);
   color: #fff;
   font-size: 0.62rem;
   font-weight: 600;
@@ -1091,7 +1142,8 @@ body.i18n-fading .lang-switcher__current {
 .about-hero__eyebrow,
 .why-us__eyebrow,
 .delivery__eyebrow,
-.bag__eyebrow {
+.bag__eyebrow,
+.contact__eyebrow {
   margin: 0 0 var(--space-2);
   font-size: 0.72rem;
   letter-spacing: 0.28em;
@@ -1105,7 +1157,8 @@ body.i18n-fading .lang-switcher__current {
 .about-hero__title,
 .why-us__title,
 .delivery__title,
-.bag__title {
+.bag__title,
+.contact__title {
   font-family: var(--font-sans);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -1120,7 +1173,8 @@ body.i18n-fading .lang-switcher__current {
 
 .catalog__title,
 .faq__title,
-.bag__title {
+.bag__title,
+.contact__title {
   font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
 }
 
@@ -1134,7 +1188,8 @@ body.i18n-fading .lang-switcher__current {
 .about-hero__subtitle,
 .why-us__intro,
 .delivery__intro,
-.bag__intro {
+.bag__intro,
+.contact__intro {
   margin: var(--space-3) auto 0;
   color: var(--color-ink-soft);
 }
@@ -1158,7 +1213,8 @@ body.i18n-fading .lang-switcher__current {
 
 .why-us__intro,
 .delivery__intro,
-.bag__intro {
+.bag__intro,
+.contact__intro {
   max-width: 40ch;
 }
 
@@ -1468,13 +1524,433 @@ body.i18n-fading .lang-switcher__current {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.28s ease,
+    color 0.28s ease,
+    border-color 0.28s ease,
+    transform 0.28s ease,
+    opacity 0.28s ease,
+    box-shadow 0.28s ease;
 }
 
 .product-card__add:hover,
 .product-card__add:focus-visible {
   background: var(--color-rose-700);
   color: #fff;
+}
+
+.product-card__add.is-added,
+.product-card__add:disabled {
+  background: var(--color-rose-700);
+  border-color: var(--color-rose-700);
+  color: #fff;
+  cursor: default;
+  transform: scale(0.96);
+  box-shadow: 0 10px 22px -16px rgba(92, 47, 44, 0.55);
+  animation: addToBagPulse 0.55s ease;
+}
+
+.product-card__add.is-added:hover,
+.product-card__add:disabled:hover {
+  background: var(--color-rose-700);
+  color: #fff;
+  transform: scale(0.96);
+}
+
+.product-card__media-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.product-card__name-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.product-card__name-link:hover,
+.product-card__name-link:focus-visible {
+  color: var(--color-rose-700);
+}
+
+/* --------------------------------------------------------------------------
+   4e2. Product detail page (product.html)
+   Luxury split layout: large media plane on the left, purchase info +
+   accordion on the right. Stacks to a single column on narrow screens.
+   -------------------------------------------------------------------------- */
+.pdp {
+  padding-block: var(--space-5) var(--space-6);
+  padding-inline: var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.pdp[hidden],
+.pdp-missing[hidden] {
+  display: none !important;
+}
+
+.pdp__crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: var(--space-4);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
+}
+
+/* Left column of the PDP — sticky media plane on wider screens. */
+.pdp__visual {
+  min-width: 0;
+}
+
+.pdp__crumb a {
+  color: var(--color-rose-700);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.pdp__crumb a:hover,
+.pdp__crumb a:focus-visible {
+  border-bottom-color: var(--color-rose-700);
+}
+
+.pdp__crumb-sep {
+  opacity: 0.5;
+}
+
+.pdp__crumb-current {
+  color: var(--color-ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pdp__layout {
+  display: grid;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.pdp__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  aspect-ratio: 1 / 1;
+  border-radius: 22px;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 28px 50px -30px rgba(140, 74, 69, 0.45);
+}
+
+.pdp__media--one { background: linear-gradient(145deg, var(--color-rose-400), var(--color-gold)); }
+.pdp__media--two { background: linear-gradient(145deg, var(--color-rose-600), var(--color-rose-900)); }
+.pdp__media--three { background: linear-gradient(145deg, var(--color-gold), var(--color-rose-600)); }
+.pdp__media--four { background: linear-gradient(145deg, var(--color-rose-200), var(--color-rose-600)); }
+
+.pdp__icon {
+  width: 42%;
+  height: 42%;
+  opacity: 0.92;
+}
+
+.pdp__tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.35em 0.9em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-rose-700);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pdp__info {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.pdp__category {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.pdp__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.55rem, 4vw, 2.15rem);
+  line-height: 1.2;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+
+.pdp__price {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.35rem;
+  color: var(--color-ink);
+}
+
+.pdp__short {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--color-ink-soft);
+}
+
+.pdp__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.pdp__qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.pdp__qty-btn {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-rose-700);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.pdp__qty-btn:hover,
+.pdp__qty-btn:focus-visible {
+  background: var(--color-rose-100);
+}
+
+.pdp__qty-value {
+  min-width: 1.6rem;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+/* Primary + secondary CTAs stacked under the qty row on the right column. */
+.pdp__cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1 1 12rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.pdp__add,
+.pdp__continue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.85em 1.6em;
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    background-color 0.28s ease,
+    color 0.28s ease,
+    border-color 0.28s ease,
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    opacity 0.28s ease;
+}
+
+.pdp__add {
+  border: 1px solid var(--color-rose-700);
+  background: var(--color-rose-700);
+  color: #fff;
+  box-shadow: 0 16px 30px -18px rgba(92, 47, 44, 0.55);
+}
+
+.pdp__add:hover,
+.pdp__add:focus-visible {
+  background: var(--color-rose-900);
+  border-color: var(--color-rose-900);
+  transform: translateY(-1px);
+}
+
+.pdp__add.is-added,
+.pdp__add:disabled {
+  cursor: default;
+  transform: scale(0.98);
+  animation: addToBagPulse 0.55s ease;
+}
+
+.pdp__add.is-added:hover,
+.pdp__add:disabled:hover {
+  background: var(--color-rose-700);
+  border-color: var(--color-rose-700);
+  transform: scale(0.98);
+}
+
+/* Ghost secondary — same footprint as Add to Bag, quieter presence. */
+.pdp__continue {
+  border: 1px solid var(--color-rose-700);
+  background: transparent;
+  color: var(--color-rose-700);
+  box-shadow: none;
+}
+
+.pdp__continue:hover,
+.pdp__continue:focus-visible {
+  background: var(--color-rose-50);
+  border-color: var(--color-rose-900);
+  color: var(--color-rose-900);
+  transform: translateY(-1px);
+}
+
+.pdp__accordion {
+  display: grid;
+  gap: 0;
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
+}
+
+.pdp-acc {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.pdp-acc__heading {
+  margin: 0;
+}
+
+.pdp-acc__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 1rem 0;
+  border: none;
+  background: transparent;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.pdp-acc__trigger:hover,
+.pdp-acc__trigger:focus-visible {
+  color: var(--color-rose-700);
+}
+
+.pdp-acc__chevron {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--color-ink-soft);
+  transition: transform 0.3s ease;
+}
+
+.pdp-acc.is-open .pdp-acc__chevron {
+  transform: rotate(180deg);
+  color: var(--color-rose-700);
+}
+
+.pdp-acc__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.pdp-acc__text {
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.pdp-missing {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  min-height: 40vh;
+  align-content: center;
+}
+
+.pdp-missing__text {
+  margin: 0;
+  color: var(--color-ink-soft);
+  font-size: 1.05rem;
+}
+
+@media (min-width: 768px) {
+  .pdp__layout {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .pdp__visual {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .pdp__media {
+    min-height: 420px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pdp {
+    padding-inline: var(--space-6);
+  }
+
+  .pdp__layout {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 3.5rem;
+  }
+
+  .pdp__media {
+    min-height: 520px;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1809,6 +2285,151 @@ body.i18n-fading .lang-switcher__current {
 }
 
 /* --------------------------------------------------------------------------
+   4g. Contact page
+   Centered hero + modular channel cards. Grid auto-wraps: 1 col (mobile),
+   2 cols (tablet), up to 4 cols when more channels are added (desktop).
+   -------------------------------------------------------------------------- */
+.contact {
+  padding-block: var(--space-6);
+  min-height: 50vh;
+}
+
+.contact__head {
+  max-width: 42rem;
+  margin: 0 auto var(--space-6);
+  padding-inline: var(--space-4);
+  text-align: center;
+}
+
+.contact-channels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  max-width: 56rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+  list-style: none;
+}
+
+.contact-channels__item {
+  margin: 0;
+}
+
+.contact-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  height: 100%;
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-cream);
+  border: 1px solid rgba(140, 74, 69, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 20px 44px -34px rgba(140, 74, 69, 0.35);
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    background-color 0.28s ease,
+    border-color 0.28s ease;
+}
+
+.contact-card:hover,
+.contact-card:focus-visible {
+  transform: translateY(-5px);
+  background: #fff;
+  border-color: rgba(140, 74, 69, 0.2);
+  box-shadow: 0 28px 52px -26px rgba(140, 74, 69, 0.42);
+  outline: none;
+}
+
+.contact-card:focus-visible {
+  box-shadow:
+    0 28px 52px -26px rgba(140, 74, 69, 0.42),
+    0 0 0 3px rgba(181, 90, 84, 0.35);
+}
+
+.contact-card__icon {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 50%;
+  color: var(--color-rose-700);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(140, 74, 69, 0.08);
+  transition: transform 0.28s ease, background-color 0.28s ease;
+}
+
+.contact-card:hover .contact-card__icon,
+.contact-card:focus-visible .contact-card__icon {
+  transform: scale(1.06);
+}
+
+.contact-card__icon svg {
+  width: 52%;
+  height: 52%;
+}
+
+.contact-card--email .contact-card__icon {
+  background: var(--color-rose-50);
+  color: var(--color-rose-700);
+}
+
+.contact-card--instagram .contact-card__icon {
+  background: linear-gradient(135deg, var(--color-rose-400), var(--color-gold));
+  color: #fff;
+  box-shadow: none;
+}
+
+.contact-card__name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-ink);
+}
+
+.contact-card__desc {
+  margin: 0;
+  max-width: 28ch;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--color-ink-soft);
+}
+
+@media (min-width: 600px) {
+  .contact-channels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-channels {
+    max-width: 72rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-card,
+  .contact-card__icon {
+    transition: none;
+  }
+
+  .contact-card:hover,
+  .contact-card:focus-visible {
+    transform: none;
+  }
+
+  .contact-card:hover .contact-card__icon,
+  .contact-card:focus-visible .contact-card__icon {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
    4h. Bag page
    A plain vertical list of item rows (icon + info + quantity stepper + line
    total + remove) next to a small summary card. On narrow screens each row
@@ -1822,7 +2443,7 @@ body.i18n-fading .lang-switcher__current {
 
 .bag__head {
   max-width: 40rem;
-  margin: 0 auto var(--space-6);
+  margin: 0 auto var(--space-5);
   padding-inline: var(--space-4);
   text-align: center;
 }
@@ -1841,6 +2462,14 @@ body.i18n-fading .lang-switcher__current {
   text-align: center;
 }
 
+/* Class `display: grid` beats the UA `[hidden] { display: none }` rule, so
+   without this the empty/body panels both stay visible and the last total
+   never disappears when the cart is cleared. */
+.bag__empty[hidden],
+.bag__body[hidden] {
+  display: none !important;
+}
+
 .bag__empty-text {
   margin: 0;
   color: var(--color-ink-soft);
@@ -1849,6 +2478,19 @@ body.i18n-fading .lang-switcher__current {
 .bag__body {
   display: grid;
   gap: var(--space-5);
+}
+
+/* Centered rose pill between the page title and the item list — matches
+   the empty-state Continue Shopping button so both bag states feel identical. */
+.bag__continue {
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--space-4);
+  margin-bottom: calc(var(--space-3) * -0.25);
+}
+
+.bag__continue .btn {
+  text-align: center;
 }
 
 .bag__list {
@@ -1871,6 +2513,16 @@ body.i18n-fading .lang-switcher__current {
   background: #fff;
   border: 1px solid var(--color-line);
   border-radius: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.bag__qty-btn,
+.bag__remove {
+  position: relative;
+  z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .bag__item-icon {
@@ -2241,7 +2893,9 @@ body.i18n-fading .lang-switcher__current {
   .btn,
   .site-header__cta,
   .product-card__add,
-  .bag__checkout {
+  .bag__checkout,
+  .pdp__add,
+  .pdp__continue {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2254,10 +2908,30 @@ body.i18n-fading .lang-switcher__current {
     height: 44px;
   }
 
-  .bag__qty-btn {
+  .site-fab-bag {
+    right: 24px;
+    bottom: 24px;
+  }
+
+  .bag__qty-btn,
+  .pdp__qty-btn {
     width: 44px;
     height: 44px;
     font-size: 1.1rem;
+  }
+
+  .pdp-acc__trigger {
+    min-height: 44px;
+  }
+
+  .pdp__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pdp__cta {
+    flex: 1 1 auto;
+    width: 100%;
   }
 
   .site-footer__social a {
@@ -2316,10 +2990,55 @@ body.i18n-fading .lang-switcher__current {
   }
 }
 
+@keyframes fabEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cartPop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.18);
+  }
+  55% {
+    transform: scale(0.94);
+  }
+  75% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes addToBagPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0.94);
+    opacity: 0.88;
+  }
+  100% {
+    transform: scale(0.96);
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero__blob,
   .hero__window,
   .hero__arrow,
+  .site-fab-bag,
   [data-reveal],
   .step__num,
   .step__connector,
@@ -2335,6 +3054,15 @@ body.i18n-fading .lang-switcher__current {
     filter: none !important;
   }
 
+  .product-card__add.is-added,
+  .product-card__add:disabled,
+  .pdp__add.is-added,
+  .pdp__add:disabled,
+  .site-fab-bag.is-popping {
+    animation: none !important;
+    transform: none !important;
+  }
+
   [data-reveal] {
     opacity: 1 !important;
   }
@@ -2348,6 +3076,8 @@ body.i18n-fading .lang-switcher__current {
   .faq-item__question,
   .faq-item__chevron,
   .faq-item__answer,
+  .pdp-acc__chevron,
+  .pdp-acc__panel,
   .lang-switcher__menu,
   .lang-switcher__chevron,
   .lang-switcher__option,

@@ -26,6 +26,7 @@
       <a href="makeup.html" data-i18n="makeup">Makeup</a>
       <a href="bestsellers.html" data-i18n="bestsellers">Bestsellers</a>
       <a href="about.html" data-i18n="aboutUs">About</a>
+      <a href="contact.html" data-i18n="navContact">Contact</a>
     </nav>
     <div class="site-header__actions">
     <a class="site-header__cta" href="catalog.html" data-i18n="shopNow">Shop Now</a>
@@ -71,12 +72,13 @@
       <svg class="site-header__toggle-icon site-header__toggle-icon--open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
       <svg class="site-header__toggle-icon site-header__toggle-icon--close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
     </button>
-    <a class="site-header__bag" href="bag.html" aria-label="Shopping bag" data-i18n-aria="bag">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-      <span class="site-header__bag-count" data-bag-count hidden>0</span>
-    </a>
     </div>
   </header>
+
+  <a class="site-header__bag site-fab-bag" href="bag.html" aria-label="Shopping bag" data-i18n-aria="bag">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+    <span class="site-header__bag-count" data-bag-count hidden>0</span>
+  </a>
 
   <main>
     <section class="catalog">
@@ -87,14 +89,14 @@
       </div>
 
       <div class="catalog__grid">
-        <article class="product-card">
-          <div class="product-card__media product-card__media--one">
+        <article class="product-card" data-product-id="rose-gold-serum">
+          <a class="product-card__media-link" href="product.html?id=rose-gold-serum"><div class="product-card__media product-card__media--one">
             <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h8v4l2 2v18H10V10l2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 14h8" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Rose Gold Serum</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=rose-gold-serum">Rose Gold Serum</a></h3>
             <p class="product-card__desc" data-i18n="prodRoseGoldSerum">Radiance-boosting daily oil</p>
             <div class="product-card__row">
               <span class="product-card__price">$48</span>
@@ -103,13 +105,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--one">
+        <article class="product-card" data-product-id="hydra-bloom-moisturizer">
+          <a class="product-card__media-link" href="product.html?id=hydra-bloom-moisturizer"><div class="product-card__media product-card__media--one">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h8v4l2 2v18H10V10l2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 15h8" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Hydra Bloom Moisturizer</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=hydra-bloom-moisturizer">Hydra Bloom Moisturizer</a></h3>
             <p class="product-card__desc" data-i18n="prodHydraBloom">24-hour weightless hydration</p>
             <div class="product-card__row">
               <span class="product-card__price">$42</span>
@@ -118,14 +120,14 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--three">
+        <article class="product-card" data-product-id="dew-drop-cleansing-oil">
+          <a class="product-card__media-link" href="product.html?id=dew-drop-cleansing-oil"><div class="product-card__media product-card__media--three">
             <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="11" y="12" width="10" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M14 12V6a2 2 0 012-2 2 2 0 012 2v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M13 18h6" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Dew Drop Cleansing Oil</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=dew-drop-cleansing-oil">Dew Drop Cleansing Oil</a></h3>
             <p class="product-card__desc" data-i18n="prodDewDrop">Melts away makeup &amp; impurities</p>
             <div class="product-card__row">
               <span class="product-card__price">$32</span>
@@ -134,13 +136,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--four">
+        <article class="product-card" data-product-id="velvet-night-repair-cream">
+          <a class="product-card__media-link" href="product.html?id=velvet-night-repair-cream"><div class="product-card__media product-card__media--four">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="8" y="12" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6" /><ellipse cx="16" cy="12" rx="8" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M11 18h10" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Velvet Night Repair Cream</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=velvet-night-repair-cream">Velvet Night Repair Cream</a></h3>
             <p class="product-card__desc" data-i18n="prodVelvetNight">Overnight renewal &amp; deep hydration</p>
             <div class="product-card__row">
               <span class="product-card__price">$56</span>
@@ -149,13 +151,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--two">
+        <article class="product-card" data-product-id="bright-eyes-cream">
+          <a class="product-card__media-link" href="product.html?id=bright-eyes-cream"><div class="product-card__media product-card__media--two">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="9" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="16" cy="17" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Bright Eyes Cream</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=bright-eyes-cream">Bright Eyes Cream</a></h3>
             <p class="product-card__desc" data-i18n="prodBrightEyes">De-puffs &amp; brightens the eye area</p>
             <div class="product-card__row">
               <span class="product-card__price">$34</span>
@@ -164,14 +166,14 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--two">
+        <article class="product-card" data-product-id="petal-soft-lip-balm">
+          <a class="product-card__media-link" href="product.html?id=petal-soft-lip-balm"><div class="product-card__media product-card__media--two">
             <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 26s-8-5-8-11a5 5 0 019-2.8A5 5 0 0126 15c0 6-8 11-8 11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Petal Soft Lip Balm</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=petal-soft-lip-balm">Petal Soft Lip Balm</a></h3>
             <p class="product-card__desc" data-i18n="prodPetalLip">Nourishing shea &amp; rosehip</p>
             <div class="product-card__row">
               <span class="product-card__price">$14</span>
@@ -180,13 +182,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--two">
+        <article class="product-card" data-product-id="velvet-matte-lipstick">
+          <a class="product-card__media-link" href="product.html?id=velvet-matte-lipstick"><div class="product-card__media product-card__media--two">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M14 4h4l1 6-1 3v15h-4V13l-1-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Velvet Matte Lipstick</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=velvet-matte-lipstick">Velvet Matte Lipstick</a></h3>
             <p class="product-card__desc" data-i18n="prodVelvetLipstick">Shade: Blush Nude</p>
             <div class="product-card__row">
               <span class="product-card__price">$24</span>
@@ -195,14 +197,14 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--three">
+        <article class="product-card" data-product-id="silk-cushion-foundation">
+          <a class="product-card__media-link" href="product.html?id=silk-cushion-foundation"><div class="product-card__media product-card__media--three">
             <span class="product-card__tag" data-i18n="tagNew">New</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="10" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M11 8.5c1.5-2 3.2-3 5-3s3.5 1 5 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Silk Cushion Foundation</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=silk-cushion-foundation">Silk Cushion Foundation</a></h3>
             <p class="product-card__desc" data-i18n="prodSilkFoundation">Buildable, natural finish</p>
             <div class="product-card__row">
               <span class="product-card__price">$36</span>
@@ -211,13 +213,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--four">
+        <article class="product-card" data-product-id="golden-hour-highlighter">
+          <a class="product-card__media-link" href="product.html?id=golden-hour-highlighter"><div class="product-card__media product-card__media--four">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="9" width="14" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="16" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Golden Hour Highlighter</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=golden-hour-highlighter">Golden Hour Highlighter</a></h3>
             <p class="product-card__desc" data-i18n="prodGoldenHighlighter">A warm, lit-from-within glow</p>
             <div class="product-card__row">
               <span class="product-card__price">$29</span>
@@ -226,13 +228,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--one">
+        <article class="product-card" data-product-id="featherlight-mascara">
+          <a class="product-card__media-link" href="product.html?id=featherlight-mascara"><div class="product-card__media product-card__media--one">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M13 4h6l-1 8h-4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M14 12v14a2 2 0 002 2 2 2 0 002-2V12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 18l-2-1M20 18l2-1M12 22l-2 1M20 22l2 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Featherlight Mascara</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=featherlight-mascara">Featherlight Mascara</a></h3>
             <p class="product-card__desc" data-i18n="prodFeatherMascara">Lengthens without clumping</p>
             <div class="product-card__row">
               <span class="product-card__price">$22</span>
@@ -241,14 +243,14 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--three">
+        <article class="product-card" data-product-id="rose-petal-blush-duo">
+          <a class="product-card__media-link" href="product.html?id=rose-petal-blush-duo"><div class="product-card__media product-card__media--three">
             <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="10" width="22" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="12.5" cy="17" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="19.5" cy="17" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Rose Petal Blush Duo</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=rose-petal-blush-duo">Rose Petal Blush Duo</a></h3>
             <p class="product-card__desc" data-i18n="prodRosePetalBlush">Buildable flush of colour</p>
             <div class="product-card__row">
               <span class="product-card__price">$26</span>
@@ -257,13 +259,13 @@
           </div>
         </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--four">
+        <article class="product-card" data-product-id="sheer-veil-setting-powder">
+          <a class="product-card__media-link" href="product.html?id=sheer-veil-setting-powder"><div class="product-card__media product-card__media--four">
             <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="17" r="11" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="12" cy="14" r="1" fill="currentColor" /><circle cx="20" cy="14" r="1" fill="currentColor" /><circle cx="16" cy="20" r="1" fill="currentColor" /><circle cx="12" cy="21" r="1" fill="currentColor" /><circle cx="20" cy="21" r="1" fill="currentColor" /></svg>
-          </div>
+          </div></a>
           <div class="product-card__body">
             <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Sheer Veil Setting Powder</h3>
+            <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=sheer-veil-setting-powder">Sheer Veil Setting Powder</a></h3>
             <p class="product-card__desc" data-i18n="prodSheerVeilPowder">Blurs pores, controls shine</p>
             <div class="product-card__row">
               <span class="product-card__price">$31</span>
@@ -317,7 +319,7 @@
         <a href="index.html" data-i18n="home">Home</a>
         <a href="catalog.html" data-i18n="catalog">Shop All</a>
         <a href="about.html" data-i18n="aboutUs">About</a>
-        <a href="#" data-i18n="contactUs">Contact Us</a>
+        <a href="contact.html" data-i18n="contactUs">Contact Us</a>
       </nav>
     </div>
 
@@ -327,6 +329,7 @@
   </footer>
 
   <script src="scripts/translations.js"></script>
+  <script src="scripts/products.js"></script>
   <script src="scripts/main.js"></script>
 </body>
 </html>
