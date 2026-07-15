@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bestsellers — Shopistik</title>
-  <meta name="description" content="Shop Shopistik's bestsellers — the skincare and makeup our customers keep coming back for." />
+  <title>Checkout — Shopistik</title>
+  <meta name="description" content="Complete your Shopistik order — delivery details and payment." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -81,108 +81,77 @@
   </a>
 
   <main>
-    <section class="catalog">
-      <div class="catalog__head">
-        <p class="catalog__eyebrow" data-i18n="bestsellersEyebrow">Fan Favourites</p>
-        <h1 class="catalog__title" data-i18n="bestsellers">Bestsellers</h1>
-        <p class="catalog__intro" data-i18n="bestsellersIntro">The skincare and makeup our customers reorder again and again — proven favourites, tried and loved.</p>
+    <section class="checkout">
+      <div class="checkout__head">
+        <p class="checkout__eyebrow" data-i18n="checkoutEyebrow">Almost There</p>
+        <h1 class="checkout__title" data-i18n="checkoutTitle">Checkout</h1>
+        <p class="checkout__intro" data-i18n="checkoutIntro">Enter your delivery details and place your order.</p>
       </div>
 
-      <div class="catalog__grid">
-        <article class="product-card">
-          <div class="product-card__media product-card__media--one">
-            <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
-            <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h8v4l2 2v18H10V10l2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 14h8" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
-          <div class="product-card__body">
-            <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Rose Gold Serum</h3>
-            <p class="product-card__desc" data-i18n="prodRoseGoldSerum">Radiance-boosting daily oil</p>
-            <div class="product-card__row">
-              <span class="product-card__price" data-price-usd="48">$48</span>
-              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
-            </div>
-          </div>
-        </article>
+      <div class="checkout__empty" id="checkoutEmpty" hidden>
+        <p data-i18n="checkoutEmpty">Your bag is empty. Add something you love, then return here.</p>
+        <a class="btn" href="index.html#shop" data-i18n="continueShopping">Continue Shopping</a>
+      </div>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--two">
-            <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
-            <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 26s-8-5-8-11a5 5 0 019-2.8A5 5 0 0126 15c0 6-8 11-8 11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
-          </div>
-          <div class="product-card__body">
-            <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Petal Soft Lip Balm</h3>
-            <p class="product-card__desc" data-i18n="prodPetalLip">Nourishing shea &amp; rosehip</p>
-            <div class="product-card__row">
-              <span class="product-card__price" data-price-usd="14">$14</span>
-              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
-            </div>
-          </div>
-        </article>
+      <div class="checkout__panel" id="checkoutPanel" hidden>
+        <div class="checkout__layout">
+          <form class="checkout-form" id="checkoutForm" novalidate>
+            <h2 class="checkout-form__title" data-i18n="checkoutDetails">Delivery Details</h2>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--three">
-            <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
-            <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="10" width="22" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="12.5" cy="17" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="19.5" cy="17" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
-          <div class="product-card__body">
-            <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Rose Petal Blush Duo</h3>
-            <p class="product-card__desc" data-i18n="prodRosePetalBlush">Buildable flush of colour</p>
-            <div class="product-card__row">
-              <span class="product-card__price" data-price-usd="26">$26</span>
-              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
-            </div>
-          </div>
-        </article>
+            <p class="checkout-form__error" id="checkoutFormError" role="alert" hidden></p>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--four">
-            <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h8v4l2 2v18H10V10l2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 15h8" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
-          <div class="product-card__body">
-            <p class="product-card__category" data-i18n="skincare">Skincare</p>
-            <h3 class="product-card__name">Hydra Bloom Moisturizer</h3>
-            <p class="product-card__desc" data-i18n="prodHydraBloom">24-hour weightless hydration</p>
-            <div class="product-card__row">
-              <span class="product-card__price" data-price-usd="42">$42</span>
-              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
+            <div class="checkout-form__row">
+              <div class="checkout-form__field">
+                <label for="checkoutFirstName" data-i18n="firstName">First Name</label>
+                <input type="text" id="checkoutFirstName" name="firstName" autocomplete="given-name" required />
+              </div>
+              <div class="checkout-form__field">
+                <label for="checkoutLastName" data-i18n="lastName">Last Name</label>
+                <input type="text" id="checkoutLastName" name="lastName" autocomplete="family-name" required />
+              </div>
             </div>
-          </div>
-        </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--one">
-            <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
-            <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M14 4h4l1 6-1 3v15h-4V13l-1-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
-          </div>
-          <div class="product-card__body">
-            <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Velvet Matte Lipstick</h3>
-            <p class="product-card__desc" data-i18n="prodVelvetLipstick">Shade: Blush Nude</p>
-            <div class="product-card__row">
-              <span class="product-card__price" data-price-usd="24">$24</span>
-              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
+            <div class="checkout-form__field">
+              <label for="checkoutPhone" data-i18n="phoneNumber">Phone Number</label>
+              <input type="tel" id="checkoutPhone" name="phone" autocomplete="tel" required />
             </div>
-          </div>
-        </article>
 
-        <article class="product-card">
-          <div class="product-card__media product-card__media--two">
-            <span class="product-card__tag" data-i18n="tagBestseller">Bestseller</span>
-            <svg class="product-card__icon" viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="9" width="14" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="16" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
-          </div>
-          <div class="product-card__body">
-            <p class="product-card__category" data-i18n="makeup">Makeup</p>
-            <h3 class="product-card__name">Golden Hour Highlighter</h3>
-            <p class="product-card__desc" data-i18n="prodGoldenHighlighter">A warm, lit-from-within glow</p>
-            <div class="product-card__row">
-              <span class="product-card__price" data-price-usd="29">$29</span>
-              <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
+            <div class="checkout-form__field">
+              <label for="checkoutAddress" data-i18n="deliveryAddress">Delivery Address</label>
+              <textarea id="checkoutAddress" name="address" rows="3" autocomplete="street-address" required></textarea>
             </div>
-          </div>
-        </article>
+
+            <fieldset class="checkout-form__payment">
+              <legend data-i18n="paymentMethod">Payment Method</legend>
+              <label class="checkout-form__radio">
+                <input type="radio" name="payment" value="cod" checked />
+                <span data-i18n="payCash">Cash on Delivery</span>
+              </label>
+              <label class="checkout-form__radio">
+                <input type="radio" name="payment" value="transfer" />
+                <span data-i18n="payTransfer">Bank Transfer to Card</span>
+              </label>
+              <div class="checkout-form__transfer" id="checkoutTransferDetails" hidden>
+                <p class="checkout-form__transfer-title" data-i18n="transferDetailsTitle">Transfer details:</p>
+                <p data-i18n="transferBank">Bank: Ameriabank</p>
+                <p data-i18n="transferAccount">Account: 9050000000000000 (IE Anna Ghazaryan)</p>
+                <p class="checkout-form__transfer-note" data-i18n="transferNote">Please send the receipt or confirmation to our Instagram after the transfer.</p>
+              </div>
+            </fieldset>
+
+            <button type="submit" class="btn checkout-form__submit" data-i18n="placeOrder">Place Order</button>
+          </form>
+
+          <aside class="checkout__summary" aria-labelledby="checkoutSummaryTitle">
+            <h2 class="checkout__summary-title" id="checkoutSummaryTitle" data-i18n="orderSummary">Order Summary</h2>
+            <ul class="checkout__list" id="checkoutList"></ul>
+            <div class="checkout__total">
+              <span data-i18n="total">Total</span>
+              <strong id="checkoutTotal">$0</strong>
+            </div>
+            <a class="btn checkout__continue" href="index.html" data-i18n="continueShopping">Continue Shopping</a>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
