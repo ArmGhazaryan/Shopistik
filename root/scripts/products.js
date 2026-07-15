@@ -1,6 +1,6 @@
 // Shopistik — shared product catalogue
 // Loaded before product.js / used by the product detail page. Each entry
-// mirrors a card on catalog.html (and the category pages). Detail copy is
+// mirrors cards on the homepage collection (and the category pages). Detail copy is
 // stored as i18n keys so Description / How to Use / Ingredients stay in
 // sync with the language switcher.
 
