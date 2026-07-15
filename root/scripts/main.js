@@ -3,6 +3,81 @@
 // Fetch calls to the API (e.g. fetch("/api/products")) and page logic go here.
 
 /* --------------------------------------------------------------------------
+   Currency formatting
+   Catalogue prices are always stored/compared in USD. Armenian (hy) shoppers
+   see a converted AMD display at a fixed rate ($1 = 400 ֏); EN/RU stay in $.
+   `data-price-usd` on product cards keeps the base amount intact even after
+   the visible label is rewritten to dram.
+   -------------------------------------------------------------------------- */
+(function () {
+  const USD_TO_AMD = 400;
+
+  function getLang() {
+    if (window.ShopistikI18n && typeof window.ShopistikI18n.getLang === 'function') {
+      return window.ShopistikI18n.getLang();
+    }
+    return document.documentElement.getAttribute('lang') || 'en';
+  }
+
+  function usesAmd(lang) {
+    return (lang || getLang()) === 'hy';
+  }
+
+  function toAmd(usdAmount) {
+    return Math.round(Number(usdAmount) * USD_TO_AMD);
+  }
+
+  // `usdAmount` is always the base USD figure stored in data / localStorage.
+  function formatUsd(usdAmount, lang) {
+    const amount = Number(usdAmount);
+    const safe = Number.isFinite(amount) ? amount : 0;
+
+    if (usesAmd(lang)) {
+      return `${toAmd(safe).toLocaleString('en-US')} ֏`;
+    }
+
+    const fixed = safe.toFixed(2);
+    return `$${fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed}`;
+  }
+
+  function readUsdFromElement(el) {
+    if (!el) return 0;
+    const attr = el.getAttribute('data-price-usd');
+    if (attr != null && attr !== '') {
+      const fromAttr = parseFloat(attr);
+      return Number.isFinite(fromAttr) ? fromAttr : 0;
+    }
+    // Fallback for any price not yet annotated (USD text only).
+    const text = String(el.textContent || '');
+    if (text.includes('֏') || /դր/i.test(text)) return 0;
+    return parseFloat(text.replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  function syncDomPrices() {
+    document.querySelectorAll('[data-price-usd]').forEach((el) => {
+      el.textContent = formatUsd(el.getAttribute('data-price-usd'));
+    });
+  }
+
+  window.ShopistikCurrency = {
+    USD_TO_AMD,
+    getLang,
+    usesAmd,
+    toAmd,
+    formatUsd,
+    readUsdFromElement,
+    syncDomPrices,
+  };
+
+  document.addEventListener('shopistik:langchange', syncDomPrices);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncDomPrices);
+  } else {
+    syncDomPrices();
+  }
+})();
+
+/* --------------------------------------------------------------------------
    Mobile/tablet nav toggle
    Below 900px the horizontal nav has nowhere to sit, so `.site-header__nav`
    is instead shown/hidden as a dropdown panel via one class — `nav-open` —
@@ -264,10 +339,11 @@
   function saveBag(bag) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(bag));
     updateBagCount(bag);
+    document.dispatchEvent(new CustomEvent('shopistik:bagchange', { detail: { bag } }));
   }
 
   function updateBagCount(bag) {
-    const count = bag.reduce((sum, item) => sum + item.qty, 0);
+    const count = bag.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
     document.querySelectorAll('[data-bag-count]').forEach((el) => {
       el.textContent = String(count);
       el.hidden = count === 0;
@@ -276,6 +352,14 @@
 
   function parsePrice(text) {
     return parseFloat(String(text).replace(/[^0-9.]/g, '')) || 0;
+  }
+
+  function readProductCardPrice(card) {
+    const priceEl = card.querySelector('.product-card__price');
+    if (window.ShopistikCurrency) {
+      return window.ShopistikCurrency.readUsdFromElement(priceEl);
+    }
+    return priceEl ? parsePrice(priceEl.textContent) : 0;
   }
 
   function addToBag(product, quantity) {
@@ -293,28 +377,23 @@
   // Brief bounce on the floating bag FAB so the add feels acknowledged
   // beyond the button label change alone.
   function pulseBagFab() {
-    const fab = document.querySelector('.site-fab-bag');
-    if (!fab) return;
-    fab.classList.remove('is-popping');
-    // Force a reflow so re-adding the class retriggers the animation even
-    // when the user clicks "Add to Bag" twice in quick succession.
-    void fab.offsetWidth;
-    fab.classList.add('is-popping');
-    fab.addEventListener(
-      'animationend',
-      () => {
-        fab.classList.remove('is-popping');
-      },
-      { once: true }
-    );
+    document.querySelectorAll('.site-fab-bag, .site-header__cart').forEach((fab) => {
+      fab.classList.remove('is-popping');
+      void fab.offsetWidth;
+      fab.classList.add('is-popping');
+      fab.addEventListener(
+        'animationend',
+        () => {
+          fab.classList.remove('is-popping');
+        },
+        { once: true }
+      );
+    });
   }
 
-  // Every product card on the catalog/category pages has an "Add to Bag"
-  // button; read the card's own text content instead of hard-coding data
-  // twice, so the bag always matches whatever the page displays. The
-  // category is stored by its translation *key* (e.g. "skincare"), not its
-  // display text, so the bag stays correct regardless of which language was
-  // active when the item was added — see the bag-rendering module below.
+  // Every product card on listing pages has an "Add to Bag" button; read the
+  // card's own text content instead of hard-coding data twice. Category is
+  // stored by its translation *key* so the bag stays correct across languages.
   document.querySelectorAll('.product-card__add').forEach((button) => {
     button.addEventListener('click', () => {
       if (button.disabled || button.classList.contains('is-added')) return;
@@ -327,13 +406,12 @@
       addToBag({
         name: card.querySelector('.product-card__name').textContent.trim(),
         category: categoryEl.getAttribute('data-i18n') || categoryEl.textContent.trim().toLowerCase(),
-        price: parsePrice(card.querySelector('.product-card__price').textContent),
+        price: readProductCardPrice(card),
+        id: card.getAttribute('data-product-id') || undefined,
       });
 
       pulseBagFab();
 
-      // Elegant confirmation: scale/fade via `.is-added`, then restore the
-      // original i18n label so language switches stay correct afterwards.
       const originalText = button.textContent;
       button.classList.add('is-added');
       button.textContent = window.ShopistikI18n ? window.ShopistikI18n.t('addedConfirm') : 'Added ✓';
@@ -348,9 +426,264 @@
 
   updateBagCount(getBag());
 
-  // Shared with the bag-page rendering script below (and available to any
-  // future page that needs to read/write the same cart — e.g. product.js).
-  window.ShopistikBag = { getBag, saveBag, updateBagCount, addToBag, pulseBagFab };
+  window.ShopistikBag = {
+    getBag,
+    saveBag,
+    updateBagCount,
+    addToBag,
+    pulseBagFab,
+    openCartDrawer: null,
+    closeCartDrawer: null,
+  };
+})();
+
+/* --------------------------------------------------------------------------
+   Cart drawer (slide-out sidebar)
+   Injects a right-hand drawer + dim overlay on every page, mirrors the same
+   localStorage bag used by bag.html / product cards, and opens from the
+   header cart button or floating FAB. Checkout lives on checkout.html.
+   -------------------------------------------------------------------------- */
+(function () {
+  if (!window.ShopistikBag) return;
+
+  const { getBag, saveBag } = window.ShopistikBag;
+
+  const ICONS = {
+    skincare:
+      '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4h8v4l2 2v18H10V10l2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M12 14h8" stroke="currentColor" stroke-width="1.6" /></svg>',
+    makeup:
+      '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M14 4h4l1 6-1 3v15h-4V13l-1-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>',
+  };
+
+  function t(key, fallback) {
+    return window.ShopistikI18n ? window.ShopistikI18n.t(key) : fallback || key;
+  }
+
+  function formatPrice(amount) {
+    if (window.ShopistikCurrency) return window.ShopistikCurrency.formatUsd(amount);
+    const fixed = Number(amount).toFixed(2);
+    return `$${fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed}`;
+  }
+
+  function ensureHeaderCart() {
+    const actions = document.querySelector('.site-header__actions');
+    if (!actions || actions.querySelector('[data-cart-open]')) return;
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'site-header__cart';
+    button.setAttribute('data-cart-open', '');
+    button.setAttribute('aria-haspopup', 'dialog');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', 'cartDrawer');
+    button.setAttribute('data-i18n-aria', 'bag');
+    button.setAttribute('aria-label', t('bag', 'Shopping bag'));
+    button.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>' +
+      '<span class="site-header__bag-count" data-bag-count hidden>0</span>';
+
+    const toggle = actions.querySelector('.site-header__toggle');
+    if (toggle) actions.insertBefore(button, toggle);
+    else actions.appendChild(button);
+  }
+
+  function ensureDrawerMarkup() {
+    if (document.getElementById('cartDrawer')) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'cart-drawer-overlay';
+    overlay.id = 'cartDrawerOverlay';
+    overlay.hidden = true;
+
+    const drawer = document.createElement('aside');
+    drawer.className = 'cart-drawer';
+    drawer.id = 'cartDrawer';
+    drawer.setAttribute('role', 'dialog');
+    drawer.setAttribute('aria-modal', 'true');
+    drawer.setAttribute('aria-labelledby', 'cartDrawerTitle');
+    drawer.hidden = true;
+    drawer.innerHTML = `
+      <div class="cart-drawer__header">
+        <h2 class="cart-drawer__title" id="cartDrawerTitle" data-i18n="bagTitle">Shopping Bag</h2>
+        <button type="button" class="cart-drawer__close" data-cart-close data-i18n-aria="cartClose" aria-label="Close cart">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+        </button>
+      </div>
+      <div class="cart-drawer__empty" id="cartDrawerEmpty" hidden>
+        <p data-i18n="bagEmptyText">Your bag is empty — nothing added just yet.</p>
+        <button type="button" class="btn cart-drawer__continue" data-cart-close data-i18n="continueShopping">Continue Shopping</button>
+      </div>
+      <div class="cart-drawer__body" id="cartDrawerBody" hidden>
+        <ul class="cart-drawer__list" id="cartDrawerList"></ul>
+        <div class="cart-drawer__footer">
+          <div class="cart-drawer__total-row">
+            <span data-i18n="total">Total</span>
+            <strong id="cartDrawerTotal">$0</strong>
+          </div>
+          <a class="btn cart-drawer__checkout" href="checkout.html" data-i18n="proceedCheckout">Proceed to Checkout</a>
+        </div>
+      </div>`;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(drawer);
+  }
+
+  ensureHeaderCart();
+  ensureDrawerMarkup();
+  window.ShopistikBag.updateBagCount(getBag());
+
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartDrawerOverlay');
+  const list = document.getElementById('cartDrawerList');
+  const empty = document.getElementById('cartDrawerEmpty');
+  const body = document.getElementById('cartDrawerBody');
+  const totalEl = document.getElementById('cartDrawerTotal');
+
+  function syncStaticLabels() {
+    drawer.querySelectorAll('[data-i18n]').forEach((el) => {
+      el.textContent = t(el.getAttribute('data-i18n'));
+    });
+    drawer.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+    });
+  }
+
+  function openCartDrawer() {
+    render();
+    syncStaticLabels();
+    drawer.hidden = false;
+    overlay.hidden = false;
+    // Next frame so CSS can transition from off-screen.
+    requestAnimationFrame(() => {
+      document.body.classList.add('cart-drawer-open');
+      drawer.classList.add('is-open');
+      overlay.classList.add('is-open');
+    });
+    document.querySelectorAll('[data-cart-open]').forEach((el) => {
+      el.setAttribute('aria-expanded', 'true');
+    });
+  }
+
+  function closeCartDrawer() {
+    if (!drawer.classList.contains('is-open') && drawer.hidden) return;
+
+    document.body.classList.remove('cart-drawer-open');
+    drawer.classList.remove('is-open');
+    overlay.classList.remove('is-open');
+    document.querySelectorAll('[data-cart-open]').forEach((el) => {
+      el.setAttribute('aria-expanded', 'false');
+    });
+
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      drawer.hidden = true;
+      overlay.hidden = true;
+    };
+    drawer.addEventListener('transitionend', finish, { once: true });
+    window.setTimeout(finish, 400);
+  }
+
+  function render() {
+    const raw = getBag();
+    const bag = raw.filter((item) => item && Number(item.qty) > 0);
+    if (bag.length !== raw.length) saveBag(bag);
+
+    if (!bag.length) {
+      list.innerHTML = '';
+      empty.hidden = false;
+      body.hidden = true;
+      if (totalEl) totalEl.textContent = formatPrice(0);
+      return;
+    }
+
+    empty.hidden = true;
+    body.hidden = false;
+
+    list.innerHTML = bag
+      .map(
+        (item, index) => `
+        <li class="cart-drawer__item" data-index="${index}">
+          <span class="cart-drawer__item-icon">${ICONS[item.category] || ICONS.skincare}</span>
+          <div class="cart-drawer__item-info">
+            <h3 class="cart-drawer__item-name">${item.name}</h3>
+            <p class="cart-drawer__item-price">${formatPrice(item.price)}</p>
+            <div class="cart-drawer__qty">
+              <button type="button" class="cart-drawer__qty-btn" data-action="decrease" aria-label="${t('decreaseQty', 'Decrease quantity')}">&minus;</button>
+              <span class="cart-drawer__qty-value">${item.qty}</span>
+              <button type="button" class="cart-drawer__qty-btn" data-action="increase" aria-label="${t('increaseQty', 'Increase quantity')}">+</button>
+            </div>
+          </div>
+          <div class="cart-drawer__item-side">
+            <p class="cart-drawer__item-line">${formatPrice(item.price * item.qty)}</p>
+            <button type="button" class="cart-drawer__remove" data-action="remove" aria-label="${t('removeFromBag', 'Remove {name} from bag').replace('{name}', item.name)}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+            </button>
+          </div>
+        </li>`
+      )
+      .join('');
+
+    const total = bag.reduce((sum, item) => sum + item.price * item.qty, 0);
+    if (totalEl) totalEl.textContent = formatPrice(total);
+  }
+
+  list.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
+
+    const row = button.closest('.cart-drawer__item');
+    if (!row) return;
+
+    const index = Number(row.getAttribute('data-index'));
+    const bag = getBag();
+    if (!Number.isInteger(index) || !bag[index]) return;
+
+    const action = button.getAttribute('data-action');
+    if (action === 'increase') {
+      bag[index].qty = Number(bag[index].qty) + 1;
+    } else if (action === 'decrease') {
+      bag[index].qty = Number(bag[index].qty) - 1;
+      if (bag[index].qty <= 0) bag.splice(index, 1);
+    } else if (action === 'remove') {
+      bag.splice(index, 1);
+    } else {
+      return;
+    }
+
+    saveBag(bag);
+    render();
+  });
+
+  document.addEventListener('click', (event) => {
+    const openBtn = event.target.closest('[data-cart-open], .site-fab-bag');
+    if (openBtn) {
+      event.preventDefault();
+      openCartDrawer();
+      return;
+    }
+    if (event.target.closest('[data-cart-close]') || event.target === overlay) {
+      closeCartDrawer();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && drawer.classList.contains('is-open')) {
+      closeCartDrawer();
+    }
+  });
+
+  document.addEventListener('shopistik:bagchange', render);
+  document.addEventListener('shopistik:langchange', () => {
+    syncStaticLabels();
+    render();
+  });
+
+  window.ShopistikBag.openCartDrawer = openCartDrawer;
+  window.ShopistikBag.closeCartDrawer = closeCartDrawer;
+
+  render();
 })();
 
 /* --------------------------------------------------------------------------
@@ -389,7 +722,8 @@
   }
 
   function formatPrice(amount) {
-    const fixed = amount.toFixed(2);
+    if (window.ShopistikCurrency) return window.ShopistikCurrency.formatUsd(amount);
+    const fixed = Number(amount).toFixed(2);
     return `$${fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed}`;
   }
 
@@ -500,6 +834,172 @@
   // Category labels are translated at render time (see categoryLabel above),
   // so switching language needs to re-render the already-visible bag list.
   document.addEventListener('shopistik:langchange', render);
+  document.addEventListener('shopistik:bagchange', render);
 
+  render();
+})();
+
+/* --------------------------------------------------------------------------
+   Checkout page — order summary + form validation
+   Reads the same localStorage bag for the summary sidebar. On Place Order,
+   validates name + phone (required), clears the bag, and sends the shopper
+   to success.html. Address/payment are collected for the (future) backend.
+   -------------------------------------------------------------------------- */
+(function () {
+  const empty = document.getElementById('checkoutEmpty');
+  const panel = document.getElementById('checkoutPanel');
+  const list = document.getElementById('checkoutList');
+  const totalEl = document.getElementById('checkoutTotal');
+  const form = document.getElementById('checkoutForm');
+  if (!empty || !panel || !list || !totalEl || !window.ShopistikBag) return;
+
+  const { getBag, saveBag } = window.ShopistikBag;
+  const firstName = document.getElementById('checkoutFirstName');
+  const lastName = document.getElementById('checkoutLastName');
+  const phone = document.getElementById('checkoutPhone');
+  const address = document.getElementById('checkoutAddress');
+  const formError = document.getElementById('checkoutFormError');
+  const transferDetails = document.getElementById('checkoutTransferDetails');
+
+  function t(key, fallback) {
+    return window.ShopistikI18n ? window.ShopistikI18n.t(key) : fallback || key;
+  }
+
+  function syncTransferDetails() {
+    if (!transferDetails || !form) return;
+    const selected = form.querySelector('input[name="payment"]:checked');
+    const showTransfer = selected && selected.value === 'transfer';
+    transferDetails.hidden = !showTransfer;
+  }
+
+  function formatPrice(amount) {
+    if (window.ShopistikCurrency) return window.ShopistikCurrency.formatUsd(amount);
+    const fixed = Number(amount).toFixed(2);
+    return `$${fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed}`;
+  }
+
+  function setFieldInvalid(field, invalid) {
+    if (!field) return;
+    field.classList.toggle('is-invalid', !!invalid);
+    field.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+  }
+
+  function clearValidation() {
+    [firstName, lastName, phone, address].forEach((field) => setFieldInvalid(field, false));
+    if (formError) {
+      formError.hidden = true;
+      formError.textContent = '';
+    }
+  }
+
+  function render() {
+    const bag = getBag().filter((item) => item && Number(item.qty) > 0);
+    if (!bag.length) {
+      empty.hidden = false;
+      panel.hidden = true;
+      list.innerHTML = '';
+      totalEl.textContent = formatPrice(0);
+      return;
+    }
+
+    empty.hidden = true;
+    panel.hidden = false;
+    list.innerHTML = bag
+      .map(
+        (item) => `
+        <li class="checkout__item">
+          <span class="checkout__item-name">${item.name} × ${item.qty}</span>
+          <span class="checkout__item-price">${formatPrice(item.price * item.qty)}</span>
+        </li>`
+      )
+      .join('');
+
+    const total = bag.reduce((sum, item) => sum + item.price * item.qty, 0);
+    totalEl.textContent = formatPrice(total);
+  }
+
+  if (form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      clearValidation();
+
+      const bag = getBag().filter((item) => item && Number(item.qty) > 0);
+      if (!bag.length) {
+        render();
+        return;
+      }
+
+      const first = (firstName && firstName.value.trim()) || '';
+      const last = (lastName && lastName.value.trim()) || '';
+      const phoneVal = (phone && phone.value.trim()) || '';
+      const addressVal = (address && address.value.trim()) || '';
+
+      const nameMissing = !first || !last;
+      const phoneMissing = !phoneVal;
+      let firstInvalid = null;
+
+      if (nameMissing) {
+        if (!first) {
+          setFieldInvalid(firstName, true);
+          firstInvalid = firstInvalid || firstName;
+        }
+        if (!last) {
+          setFieldInvalid(lastName, true);
+          firstInvalid = firstInvalid || lastName;
+        }
+      }
+      if (phoneMissing) {
+        setFieldInvalid(phone, true);
+        firstInvalid = firstInvalid || phone;
+      }
+      if (!addressVal) {
+        setFieldInvalid(address, true);
+        firstInvalid = firstInvalid || address;
+      }
+
+      if (nameMissing || phoneMissing || !addressVal) {
+        if (formError) {
+          formError.textContent = t(
+            'checkoutRequired',
+            'Please fill in your name and phone number.'
+          );
+          formError.hidden = false;
+        }
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      // Frontend-only order: clear the bag, then land on the confirmation page.
+      saveBag([]);
+      window.location.href = 'success.html';
+    });
+
+    [firstName, lastName, phone, address].forEach((field) => {
+      if (!field) return;
+      field.addEventListener('input', () => {
+        setFieldInvalid(field, false);
+        if (formError && !formError.hidden) {
+          formError.hidden = true;
+          formError.textContent = '';
+        }
+      });
+    });
+
+    form.querySelectorAll('input[name="payment"]').forEach((radio) => {
+      radio.addEventListener('change', syncTransferDetails);
+    });
+    syncTransferDetails();
+  }
+
+  document.addEventListener('shopistik:langchange', () => {
+    render();
+    if (formError && !formError.hidden) {
+      formError.textContent = t(
+        'checkoutRequired',
+        'Please fill in your name and phone number.'
+      );
+    }
+  });
+  document.addEventListener('shopistik:bagchange', render);
   render();
 })();

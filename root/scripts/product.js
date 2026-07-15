@@ -29,6 +29,7 @@
   }
 
   function formatPrice(amount) {
+    if (window.ShopistikCurrency) return window.ShopistikCurrency.formatUsd(amount);
     const fixed = Number(amount).toFixed(2);
     return `$${fixed.endsWith('.00') ? fixed.slice(0, -3) : fixed}`;
   }
@@ -106,6 +107,7 @@
           name: product.name,
           category: product.category,
           price: product.price,
+          id: product.id,
         },
         qty
       );

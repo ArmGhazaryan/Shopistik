@@ -31,6 +31,10 @@
     </nav>
     <div class="site-header__actions">
     <a class="site-header__cta" href="#shop" data-i18n="shopNow">Shop Now</a>
+    <button type="button" class="site-header__cart" data-cart-open aria-haspopup="dialog" aria-expanded="false" aria-controls="cartDrawer" data-i18n-aria="bag" aria-label="Shopping bag">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12a2 2 0 01-2 2H9a2 2 0 01-2-2L6 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M9 8V6a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+      <span class="site-header__bag-count" data-bag-count hidden>0</span>
+    </button>
     <div class="lang-switcher">
       <button type="button" class="lang-switcher__button" aria-haspopup="true" aria-expanded="false" aria-label="Select language">
         <span class="lang-switcher__flag" aria-hidden="true"><svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="20" height="14" fill="#00247d" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#fff" stroke-width="3" /><path d="M0,0 L20,14 M20,0 L0,14" stroke="#cf142b" stroke-width="1.2" /><path d="M10,0 V14 M0,7 H20" stroke="#fff" stroke-width="4.5" /><path d="M10,0 V14 M0,7 H20" stroke="#cf142b" stroke-width="2.5" /></svg></span>
@@ -329,7 +333,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=rose-gold-serum">Rose Gold Serum</a></h3>
             <p class="product-card__desc" data-i18n="prodRoseGoldSerum">Radiance-boosting daily oil</p>
             <div class="product-card__row">
-              <span class="product-card__price">$48</span>
+              <span class="product-card__price" data-price-usd="48">$48</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -344,7 +348,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=hydra-bloom-moisturizer">Hydra Bloom Moisturizer</a></h3>
             <p class="product-card__desc" data-i18n="prodHydraBloom">24-hour weightless hydration</p>
             <div class="product-card__row">
-              <span class="product-card__price">$42</span>
+              <span class="product-card__price" data-price-usd="42">$42</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -360,7 +364,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=dew-drop-cleansing-oil">Dew Drop Cleansing Oil</a></h3>
             <p class="product-card__desc" data-i18n="prodDewDrop">Melts away makeup &amp; impurities</p>
             <div class="product-card__row">
-              <span class="product-card__price">$32</span>
+              <span class="product-card__price" data-price-usd="32">$32</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -375,7 +379,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=velvet-night-repair-cream">Velvet Night Repair Cream</a></h3>
             <p class="product-card__desc" data-i18n="prodVelvetNight">Overnight renewal &amp; deep hydration</p>
             <div class="product-card__row">
-              <span class="product-card__price">$56</span>
+              <span class="product-card__price" data-price-usd="56">$56</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -390,7 +394,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=bright-eyes-cream">Bright Eyes Cream</a></h3>
             <p class="product-card__desc" data-i18n="prodBrightEyes">De-puffs &amp; brightens the eye area</p>
             <div class="product-card__row">
-              <span class="product-card__price">$34</span>
+              <span class="product-card__price" data-price-usd="34">$34</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -406,7 +410,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=petal-soft-lip-balm">Petal Soft Lip Balm</a></h3>
             <p class="product-card__desc" data-i18n="prodPetalLip">Nourishing shea &amp; rosehip</p>
             <div class="product-card__row">
-              <span class="product-card__price">$14</span>
+              <span class="product-card__price" data-price-usd="14">$14</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -421,7 +425,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=velvet-matte-lipstick">Velvet Matte Lipstick</a></h3>
             <p class="product-card__desc" data-i18n="prodVelvetLipstick">Shade: Blush Nude</p>
             <div class="product-card__row">
-              <span class="product-card__price">$24</span>
+              <span class="product-card__price" data-price-usd="24">$24</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -437,7 +441,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=silk-cushion-foundation">Silk Cushion Foundation</a></h3>
             <p class="product-card__desc" data-i18n="prodSilkFoundation">Buildable, natural finish</p>
             <div class="product-card__row">
-              <span class="product-card__price">$36</span>
+              <span class="product-card__price" data-price-usd="36">$36</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -452,7 +456,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=golden-hour-highlighter">Golden Hour Highlighter</a></h3>
             <p class="product-card__desc" data-i18n="prodGoldenHighlighter">A warm, lit-from-within glow</p>
             <div class="product-card__row">
-              <span class="product-card__price">$29</span>
+              <span class="product-card__price" data-price-usd="29">$29</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -467,7 +471,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=featherlight-mascara">Featherlight Mascara</a></h3>
             <p class="product-card__desc" data-i18n="prodFeatherMascara">Lengthens without clumping</p>
             <div class="product-card__row">
-              <span class="product-card__price">$22</span>
+              <span class="product-card__price" data-price-usd="22">$22</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -483,7 +487,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=rose-petal-blush-duo">Rose Petal Blush Duo</a></h3>
             <p class="product-card__desc" data-i18n="prodRosePetalBlush">Buildable flush of colour</p>
             <div class="product-card__row">
-              <span class="product-card__price">$26</span>
+              <span class="product-card__price" data-price-usd="26">$26</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
@@ -498,7 +502,7 @@
             <h3 class="product-card__name"><a class="product-card__name-link" href="product.html?id=sheer-veil-setting-powder">Sheer Veil Setting Powder</a></h3>
             <p class="product-card__desc" data-i18n="prodSheerVeilPowder">Blurs pores, controls shine</p>
             <div class="product-card__row">
-              <span class="product-card__price">$31</span>
+              <span class="product-card__price" data-price-usd="31">$31</span>
               <button class="product-card__add" type="button" data-i18n="addToBag">Add to Bag</button>
             </div>
           </div>
