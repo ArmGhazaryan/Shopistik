@@ -131,8 +131,7 @@
    clipped by overflow), then set that exact pixel value as `max-height` to
    open, and back to `0` to close. Both ends of that transition are real
    numbers, so the browser can animate smoothly between them.
-   Only one item stays open at a time: opening one closes whichever other
-   item was open first.
+   Each item toggles independently — several answers can stay open at once.
    -------------------------------------------------------------------------- */
 (function () {
   const items = document.querySelectorAll('.faq-item');
@@ -153,32 +152,26 @@
     const question = item.querySelector('.faq-item__question');
     question.addEventListener('click', () => {
       const willOpen = !item.classList.contains('is-open');
-
-      // Accordion behaviour: collapse every other item before (or instead
-      // of) opening this one, so at most one answer is ever visible.
-      items.forEach((other) => {
-        if (other !== item) setOpen(other, false);
-      });
       setOpen(item, willOpen);
     });
   });
 
-  // If the viewport is resized while an answer is open, its scrollHeight
+  // If the viewport is resized while answers are open, their scrollHeight
   // may change (text reflows to a different number of lines). Re-measure
-  // so the open answer never ends up clipped or leaving a gap.
+  // every open panel so nothing ends up clipped or leaving a gap.
   window.addEventListener('resize', () => {
-    const openItem = document.querySelector('.faq-item.is-open');
-    if (openItem) setOpen(openItem, true);
+    items.forEach((item) => {
+      if (item.classList.contains('is-open')) setOpen(item, true);
+    });
   });
 })();
 
 /* --------------------------------------------------------------------------
    Product card → detail page links
-   Catalog already hard-codes `product.html?id=…` on media/title. Category
-   pages (and any future grids, including on the homepage) only had plain
-   cards — this wires the same navigation everywhere by resolving each card
-   against window.ShopistikProducts (via data-product-id or product name).
-   Add-to-bag buttons stay outside the links so they keep working.
+   Home + category grids (and any other pages that list products) get the same
+   `product.html?id=…` navigation on media/title by resolving each card against
+   window.ShopistikProducts (via data-product-id or product name). Add-to-bag
+   buttons stay outside the links so they keep working.
    -------------------------------------------------------------------------- */
 (function () {
   const products = window.ShopistikProducts;

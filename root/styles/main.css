@@ -1,6 +1,6 @@
 /* ==========================================================================
    Shopistik — main stylesheet
-   Shared styles for all pages (index.html, catalog.html, about.html).
+   Shared styles for all pages (index.html, about.html, product.html, etc.).
    Plain CSS only — no framework, no build step, no preprocessor.
 
    Approach: mobile-first. Every base rule targets small screens; larger
@@ -58,6 +58,10 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -1404,6 +1408,8 @@ body.i18n-fading .lang-switcher__current {
    -------------------------------------------------------------------------- */
 .catalog {
   padding-block: var(--space-6);
+  /* Anchor target for Shop Now / hero CTAs (`#shop`) — clears space under the header */
+  scroll-margin-top: 5.5rem;
 }
 
 .catalog__head {
@@ -1955,8 +1961,8 @@ body.i18n-fading .lang-switcher__current {
 
 /* --------------------------------------------------------------------------
    4f. FAQ accordion
-   A list of question/answer pairs. Only one answer is open at a time —
-   opening one closes any other. The expand/collapse motion animates
+   A list of question/answer pairs. Each item toggles on its own — several
+   answers can stay open together. The expand/collapse motion animates
    `max-height` (see the comment above [data-reveal] below for why we can't
    just transition `height: auto`); the chevron flips 180deg in sync via a
    plain `transform` transition on the same 0.3s timing. See main.js for
@@ -3035,6 +3041,10 @@ body.i18n-fading .lang-switcher__current {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .hero__blob,
   .hero__window,
   .hero__arrow,

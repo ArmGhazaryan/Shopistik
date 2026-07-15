@@ -56,7 +56,7 @@ const translations = {
     faqTitle: 'Frequently asked questions',
     faqIntro: "Everything you need to know about your Shopistik ritual — if it's not here, our team is always happy to help.",
 
-    // catalog.html (Shop All)
+    // Homepage collection (was catalog.html — now #shop on index)
     shopAllEyebrow: 'The Full Collection',
     shopAllIntro: 'Every skincare and makeup product we carry, in one place — new arrivals, bestsellers and everything in between.',
 
